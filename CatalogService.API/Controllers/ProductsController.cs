@@ -72,5 +72,20 @@ namespace CatalogService.API.Controllers
                 Status = 200
             });
         }
+
+        [HttpPut]
+        [Route("{id:guid}")]
+        public async Task<ActionResult<ApiResponse>> UpdateProductAsync([FromRoute] Guid id, [FromBody] CreateProductModel model)
+        {
+            ProductDTO dto = _mapper.Map<ProductDTO>(model);
+            dto.ProductId = id;
+            ProductDTO updatedDto = await _service.UpdateAsync(dto);
+            ProductModel updatedModel = _mapper.Map<ProductModel>(updatedDto);
+            return Ok(new ApiResponse
+            {
+                Result = updatedModel,
+                Status = 200
+            });
+        }
     }
 }

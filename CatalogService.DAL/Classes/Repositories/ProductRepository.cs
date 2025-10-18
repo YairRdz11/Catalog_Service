@@ -60,9 +60,18 @@ namespace CatalogService.DAL.Classes.Repositories
             return _mapper.Map<IEnumerable<ProductDTO>>(products);
         }
 
-        public Task<ProductDTO> UpdateAsync(ProductDTO entity)
+        public async Task<ProductDTO> UpdateAsync(ProductDTO entity)
         {
-            throw new NotImplementedException();
+            var productEntity = await GetProductById(entity.ProductId);
+
+            productEntity.Name = entity.Name;
+            productEntity.Description = entity.Description;
+            productEntity.ImageUrl = entity.URL;
+            productEntity.Price = entity.Price;
+            productEntity.Amount = entity.Amount;
+            productEntity.CategoryId = entity.CategoryId;
+            await _context.SaveChangesAsync();
+            return _mapper.Map<ProductDTO>(productEntity);
         }
     }
 }

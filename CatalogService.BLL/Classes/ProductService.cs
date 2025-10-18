@@ -73,9 +73,14 @@ namespace CatalogService.BLL.Classes
             return products;
         }
 
-        public Task<ProductDTO> UpdateAsync(ProductDTO entity)
+        public async Task<ProductDTO> UpdateAsync(ProductDTO entity)
         {
-            throw new NotImplementedException();
+            ValidateProduct(entity);
+            var product = await _repository.GetByIdAsync(entity.ProductId);
+            var category = await _categoryRepository.GetByIdAsync(entity.CategoryId);
+            var result = await _repository.UpdateAsync(entity);
+
+            return result;
         }
     }
 }
