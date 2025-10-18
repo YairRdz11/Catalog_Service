@@ -9,12 +9,14 @@ namespace CatalogService.BLL.Classes
 {
     public class CategoryService : ICategoryService
     {
-        private readonly ICategoryRepository _repository;
+        private readonly ICategoryRepository _categoryRepository;
+        private readonly IProductRepository _productRepository;
 
-        public CategoryService(ICategoryRepository repository)
+        public CategoryService(ICategoryRepository categoryRepository, IProductRepository productRepository)
         {
-            _repository = repository;
-        } 
+            _categoryRepository = categoryRepository;
+            _productRepository = productRepository;
+        }
 
         public async Task<CategoryDTO> CreateAsync(CategoryDTO entity)
         {
@@ -23,37 +25,43 @@ namespace CatalogService.BLL.Classes
 
             if (entity.ParentCategoryId != Guid.Empty)
             {
-                var parentCategory = await _repository.GetByIdAsync(entity.ParentCategoryId);
+                var parentCategory = await _categoryRepository.GetByIdAsync(entity.ParentCategoryId);
             }
-            var result = await _repository.CreateAsync(entity);
+            var result = await _categoryRepository.CreateAsync(entity);
             
             return result;
         }
 
         public async Task<CategoryDTO> DeleteAsync(Guid id)
         {
-            return await _repository.DeleteAsync(id);
+            return await _categoryRepository.DeleteAsync(id);
         }
 
         public async Task<CategoryDTO> GetByIdAsync(Guid id)
         {
-            return await _repository.GetByIdAsync(id);
+            var category = await _categoryRepository.GetByIdAsync(id);
+
+            var productsByCategory = await _productRepository.GetProductsByCategory(id);
+
+            category.Products = productsByCategory;
+
+            return category;
         }
 
         public async Task<IEnumerable<CategoryDTO>> GetListAsync()
         {
-            return await _repository.GetListAsync();
+            return await _categoryRepository.GetListAsync();
         }
 
         public async Task<CategoryDTO> UpdateAsync(CategoryDTO categoryDTO)
         {
-            var entity = await _repository.GetByIdAsync(categoryDTO.Id);
+            var entity = await _categoryRepository.GetByIdAsync(categoryDTO.Id);
             ValidateCategory(categoryDTO);
             if (categoryDTO.ParentCategoryId != Guid.Empty)
             {
-                var parentCategory = await _repository.GetByIdAsync(categoryDTO.ParentCategoryId);
+                var parentCategory = await _categoryRepository.GetByIdAsync(categoryDTO.ParentCategoryId);
             }
-            var result = await _repository.UpdateAsync(categoryDTO);
+            var result = await _categoryRepository.UpdateAsync(categoryDTO);
             return result;
         }
 

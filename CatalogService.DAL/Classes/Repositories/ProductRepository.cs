@@ -3,8 +3,10 @@ using CatalogService.DAL.Classes.Data;
 using CatalogService.DAL.Classes.Data.Entities;
 using CatalogService.Transversal.Classes.Dtos;
 using CatalogService.Transversal.Classes.Exceptions;
+using CatalogService.Transversal.Interfaces.Base;
 using CatalogService.Transversal.Interfaces.DAL;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace CatalogService.DAL.Classes.Repositories
 {
@@ -72,6 +74,16 @@ namespace CatalogService.DAL.Classes.Repositories
             productEntity.CategoryId = entity.CategoryId;
             await _context.SaveChangesAsync();
             return _mapper.Map<ProductDTO>(productEntity);
+        }
+
+        public async Task<IEnumerable<ProductDTO>> GetProductsByCategory(Guid categoryId)
+        {
+            var products = await _context.Products
+                .Where(p => p.CategoryId == categoryId)
+                .OrderBy(p => p.Name)
+                .ToListAsync();
+
+            return _mapper.Map<IEnumerable<ProductDTO>>(products);
         }
     }
 }

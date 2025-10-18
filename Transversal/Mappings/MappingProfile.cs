@@ -15,7 +15,8 @@ namespace CatalogService.Transversal.Mappings
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
                 .ForMember(dest => dest.URL, opt => opt.MapFrom(src => src.URL))
                 .ForMember(dest => dest.ParentCategoryId, opt => opt.MapFrom(src => src.ParentCategoryId))
-                .ForMember(dest => dest.ParentCategoryName, opt => opt.MapFrom(src => src.ParentCategoryName));
+                .ForMember(dest => dest.ParentCategoryName, opt => opt.MapFrom(src => src.ParentCategoryName))
+                .ForMember(dest => dest.Products, opt => opt.MapFrom(src => src.Products));
 
             // Map from CategoryModel to CategoryDTO
             CreateMap<CategoryModel, CategoryDTO>()

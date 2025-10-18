@@ -11,5 +11,6 @@ namespace CatalogService.Transversal.Classes.Models
         public string URL { get; set; }
         public Guid ParentCategoryId { get; set; }
         public string ParentCategoryName { get; set; }
+        public IEnumerable<ProductModel> Products { get; set; }
     }
 }
