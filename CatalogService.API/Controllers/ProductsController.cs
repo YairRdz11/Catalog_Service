@@ -59,5 +59,18 @@ namespace CatalogService.API.Controllers
                 Status = 200
             });
         }
+
+        [HttpDelete]
+        [Route("{id:guid}")]
+        public async Task<ActionResult<ApiResponse>> DeleteProductByIdAsync([FromRoute] Guid id)
+        {
+            ProductDTO dto = await _service.DeleteAsync(id);
+            ProductModel model = _mapper.Map<ProductModel>(dto);
+            return Ok(new ApiResponse
+            {
+                Result = model,
+                Status = 200
+            });
+        }
     }
 }

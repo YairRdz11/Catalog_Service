@@ -45,9 +45,10 @@ namespace CatalogService.BLL.Classes
             }
         }
 
-        public Task<ProductDTO> DeleteAsync(Guid id)
+        public async Task<ProductDTO> DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var product = await _repository.GetByIdAsync(id);
+            return await _repository.DeleteAsync(id);
         }
 
         public async Task<ProductDTO> GetByIdAsync(Guid id)

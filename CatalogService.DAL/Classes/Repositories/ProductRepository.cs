@@ -37,9 +37,13 @@ namespace CatalogService.DAL.Classes.Repositories
             return _mapper.Map<ProductDTO>(entity);
         }
 
-        public Task<ProductDTO> DeleteAsync(Guid id)
+        public async Task<ProductDTO> DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var entity = await GetProductById(id);
+            _context.Products.Remove(entity);
+            await _context.SaveChangesAsync();
+            var productDTO = _mapper.Map<ProductDTO>(entity);
+            return productDTO;
         }
 
         public async Task<ProductDTO> GetByIdAsync(Guid id)
