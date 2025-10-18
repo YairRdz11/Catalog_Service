@@ -33,5 +33,18 @@ namespace CatalogService.API.Controllers
                 Status = 200
             });
         }
+
+        [HttpPost]
+        public async Task<ActionResult<ApiResponse>> CreateProductAsync([FromBody] CreateProductModel model)
+        {
+            ProductDTO dto = _mapper.Map<ProductDTO>(model);
+            ProductDTO createdDto = await _service.CreateAsync(dto);
+            ProductModel createdModel = _mapper.Map<ProductModel>(createdDto);
+            return Ok(new ApiResponse
+            {
+                Result = createdModel,
+                Status = 201
+            });
+        }
     }
 }

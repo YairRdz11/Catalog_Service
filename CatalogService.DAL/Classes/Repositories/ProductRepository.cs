@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using CatalogService.DAL.Classes.Data;
+using CatalogService.DAL.Classes.Data.Entities;
 using CatalogService.Transversal.Classes.Dtos;
+using CatalogService.Transversal.Classes.Exceptions;
 using CatalogService.Transversal.Interfaces.DAL;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,9 +19,22 @@ namespace CatalogService.DAL.Classes.Repositories
             _mapper = mapper;
         }
 
-        public Task<ProductDTO> CreateAsync(ProductDTO entity)
+        private async Task<Product> GetProductById(Guid id)
         {
-            throw new NotImplementedException();
+            var entity = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
+            if (entity == null)
+            {
+                throw new NotFoundException($"Product", id);
+            }
+            return entity;
+        }
+
+        public async Task<ProductDTO> CreateAsync(ProductDTO productDTO)
+        {
+            var entity = _mapper.Map<Product>(productDTO);
+            await _context.Products.AddAsync(entity);
+            await _context.SaveChangesAsync();
+            return _mapper.Map<ProductDTO>(entity);
         }
 
         public Task<ProductDTO> DeleteAsync(Guid id)

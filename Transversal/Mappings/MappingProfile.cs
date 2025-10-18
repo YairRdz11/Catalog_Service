@@ -52,6 +52,15 @@ namespace CatalogService.Transversal.Mappings
                 .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.CategoryName))
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
                 .ForMember(dest => dest.Amount, opt => opt.MapFrom(src => src.Amount));
+
+            // Map from CreateProductModel to ProductDTO
+            CreateMap<CreateProductModel, ProductDTO>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
+                .ForMember(dest => dest.URL, opt => opt.MapFrom(src => src.URL))
+                .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.CategoryId))
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
+                .ForMember(dest => dest.Amount, opt => opt.MapFrom(src => src.Amount));
         }
     }
 }
