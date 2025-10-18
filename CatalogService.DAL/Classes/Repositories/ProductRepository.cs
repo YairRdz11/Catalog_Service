@@ -55,7 +55,7 @@ namespace CatalogService.DAL.Classes.Repositories
 
         public async Task<IEnumerable<ProductDTO>> GetListAsync()
         {
-            var products = await _context.Products.ToListAsync();
+            var products = await _context.Products.OrderBy(x => x.Name).ToListAsync();
             
             return _mapper.Map<IEnumerable<ProductDTO>>(products);
         }

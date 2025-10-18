@@ -62,7 +62,15 @@ namespace CatalogService.BLL.Classes
 
         public async Task<IEnumerable<ProductDTO>> GetListAsync()
         {
-            return await _repository.GetListAsync();
+            var products = await _repository.GetListAsync();
+
+            foreach(var product in products)
+            {
+                var category = await _categoryRepository.GetByIdAsync(product.CategoryId);
+                product.CategoryName = category.Name;
+            }
+
+            return products;
         }
 
         public Task<ProductDTO> UpdateAsync(ProductDTO entity)
