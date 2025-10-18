@@ -67,7 +67,7 @@ namespace CatalogService.DAL.Classes.Repositories
 
         public async Task<CategoryDTO> UpdateAsync(CategoryDTO entity)
         {
-            var entityToUpdate = await GetCategoryById(entity.CategoryId);
+            var entityToUpdate = await GetCategoryById(entity.Id);
 
             entityToUpdate.Name = entity.Name;
             entityToUpdate.Description = entity.Description;

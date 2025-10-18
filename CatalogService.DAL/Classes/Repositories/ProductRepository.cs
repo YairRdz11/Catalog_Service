@@ -62,7 +62,7 @@ namespace CatalogService.DAL.Classes.Repositories
 
         public async Task<ProductDTO> UpdateAsync(ProductDTO entity)
         {
-            var productEntity = await GetProductById(entity.ProductId);
+            var productEntity = await GetProductById(entity.Id);
 
             productEntity.Name = entity.Name;
             productEntity.Description = entity.Description;

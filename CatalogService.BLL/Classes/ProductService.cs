@@ -19,7 +19,7 @@ namespace CatalogService.BLL.Classes
 
         public async Task<ProductDTO> CreateAsync(ProductDTO productDTO)
         {
-            productDTO.ProductId = Guid.NewGuid();
+            productDTO.Id = Guid.NewGuid();
             ValidateProduct(productDTO);
             var category = await _categoryRepository.GetByIdAsync(productDTO.CategoryId);
             var result = await _repository.CreateAsync(productDTO);
@@ -76,7 +76,7 @@ namespace CatalogService.BLL.Classes
         public async Task<ProductDTO> UpdateAsync(ProductDTO entity)
         {
             ValidateProduct(entity);
-            var product = await _repository.GetByIdAsync(entity.ProductId);
+            var product = await _repository.GetByIdAsync(entity.Id);
             var category = await _categoryRepository.GetByIdAsync(entity.CategoryId);
             var result = await _repository.UpdateAsync(entity);
 

@@ -7,7 +7,7 @@ namespace CatalogService.BLL.Classes.Validators
     {
         public void ProductValidate()
         {
-            RuleFor(product => product.ProductId)
+            RuleFor(product => product.Id)
                 .NotNull().WithMessage("ProductId cannot be null.");
             RuleFor(product => product.Name)
                 .NotEmpty().WithMessage("Product name must not be empty.")

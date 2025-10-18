@@ -18,7 +18,7 @@ namespace CatalogService.BLL.Classes
 
         public async Task<CategoryDTO> CreateAsync(CategoryDTO entity)
         {
-            entity.CategoryId = Guid.NewGuid();
+            entity.Id = Guid.NewGuid();
             ValidateCategory(entity);
 
             if (entity.ParentCategoryId != Guid.Empty)
@@ -47,7 +47,7 @@ namespace CatalogService.BLL.Classes
 
         public async Task<CategoryDTO> UpdateAsync(CategoryDTO categoryDTO)
         {
-            var entity = await _repository.GetByIdAsync(categoryDTO.CategoryId);
+            var entity = await _repository.GetByIdAsync(categoryDTO.Id);
             ValidateCategory(categoryDTO);
             if (categoryDTO.ParentCategoryId != Guid.Empty)
             {

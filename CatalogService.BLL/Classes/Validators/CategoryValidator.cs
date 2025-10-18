@@ -7,7 +7,7 @@ namespace CatalogService.BLL.Classes.Validators
     {
         public void CategoryValidate()
         {
-            RuleFor(category => category.CategoryId)
+            RuleFor(category => category.Id)
                 .NotNull().WithMessage("CategoryId cannot be null.");
             RuleFor(category => category.Name)
                 .NotEmpty().WithMessage("Category name must not be empty.")

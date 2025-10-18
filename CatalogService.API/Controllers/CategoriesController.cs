@@ -78,7 +78,7 @@ namespace CatalogService.API.Controllers
         public async Task<ActionResult<ApiResponse>> UpdateCategoryAsync([FromRoute] Guid id, [FromBody] CreateCategoryModel model)
         {
             CategoryDTO dto = _mapper.Map<CategoryDTO>(model);
-            dto.CategoryId = id;
+            dto.Id = id;
             CategoryDTO updatedDto = await _service.UpdateAsync(dto);
             CategoryModel updatedModel = _mapper.Map<CategoryModel>(updatedDto);
             return Ok(new ApiResponse

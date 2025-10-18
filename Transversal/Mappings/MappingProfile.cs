@@ -10,7 +10,7 @@ namespace CatalogService.Transversal.Mappings
         {
             // Map from CategoryDTO to CategoryModel
             CreateMap<CategoryDTO, CategoryModel>()
-                .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.CategoryId))
+                .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
                 .ForMember(dest => dest.URL, opt => opt.MapFrom(src => src.URL))
@@ -19,7 +19,7 @@ namespace CatalogService.Transversal.Mappings
 
             // Map from CategoryModel to CategoryDTO
             CreateMap<CategoryModel, CategoryDTO>()
-                .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.CategoryId))
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.CategoryId))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
                 .ForMember(dest => dest.URL, opt => opt.MapFrom(src => src.URL))
@@ -35,7 +35,7 @@ namespace CatalogService.Transversal.Mappings
 
             // Map from CategoryDTO to CategoryModel
             CreateMap<ProductDTO, ProductModel>()
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ProductId))
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
                 .ForMember(dest => dest.URL, opt => opt.MapFrom(src => src.URL))
@@ -45,7 +45,7 @@ namespace CatalogService.Transversal.Mappings
 
             // Map from CategoryModel to CategoryDTO
             CreateMap<ProductModel, ProductDTO>()
-                .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
                 .ForMember(dest => dest.URL, opt => opt.MapFrom(src => src.URL))

@@ -78,7 +78,7 @@ namespace CatalogService.API.Controllers
         public async Task<ActionResult<ApiResponse>> UpdateProductAsync([FromRoute] Guid id, [FromBody] CreateProductModel model)
         {
             ProductDTO dto = _mapper.Map<ProductDTO>(model);
-            dto.ProductId = id;
+            dto.Id = id;
             ProductDTO updatedDto = await _service.UpdateAsync(dto);
             ProductModel updatedModel = _mapper.Map<ProductModel>(updatedDto);
             return Ok(new ApiResponse
