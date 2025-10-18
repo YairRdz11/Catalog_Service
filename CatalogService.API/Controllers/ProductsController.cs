@@ -46,5 +46,18 @@ namespace CatalogService.API.Controllers
                 Status = 201
             });
         }
+
+        [HttpGet]
+        [Route("{id:guid}")]
+        public async Task<ActionResult<ApiResponse>> GetProductByIdAsync([FromRoute] Guid id)
+        {
+            ProductDTO dto = await _service.GetByIdAsync(id);
+            ProductModel model = _mapper.Map<ProductModel>(dto);
+            return Ok(new ApiResponse
+            {
+                Result = model,
+                Status = 200
+            });
+        }
     }
 }

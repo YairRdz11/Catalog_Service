@@ -42,9 +42,11 @@ namespace CatalogService.DAL.Classes.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<ProductDTO> GetByIdAsync(Guid id)
+        public async Task<ProductDTO> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var entity = await GetProductById(id);
+
+            return _mapper.Map<ProductDTO>(entity);
         }
 
         public async Task<IEnumerable<ProductDTO>> GetListAsync()

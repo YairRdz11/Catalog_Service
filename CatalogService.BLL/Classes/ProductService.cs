@@ -50,9 +50,13 @@ namespace CatalogService.BLL.Classes
             throw new NotImplementedException();
         }
 
-        public Task<ProductDTO> GetByIdAsync(Guid id)
+        public async Task<ProductDTO> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var product = await _repository.GetByIdAsync(id);
+            var category = await _categoryRepository.GetByIdAsync(product.CategoryId);
+
+            product.CategoryName = category.Name;
+            return product;
         }
 
         public async Task<IEnumerable<ProductDTO>> GetListAsync()
