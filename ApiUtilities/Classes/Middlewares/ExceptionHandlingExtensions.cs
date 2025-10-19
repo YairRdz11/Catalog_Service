@@ -1,4 +1,6 @@
-﻿namespace CatalogService.API.Middlewares
+﻿using Microsoft.AspNetCore.Builder;
+
+namespace CatalogService.API.Middlewares
 {
     public static class ExceptionHandlingExtensions
     {
