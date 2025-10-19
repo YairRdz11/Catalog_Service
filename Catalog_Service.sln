@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36603.0 d17.14
+VisualStudioVersion = 17.14.36603.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatalogService.API", "CatalogService.API\CatalogService.API.csproj", "{F10A39A9-A4B9-44EA-864E-2547C75C6E0C}"
 EndProject
@@ -10,8 +10,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utilities", "Utilities\Utilities.csproj", "{0771FA43-A9CB-4600-AEFE-897DFF501BCC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatalogService.Transversal", "Transversal\CatalogService.Transversal.csproj", "{914FA2A0-5FAA-48DB-B3EA-5D768109EF9C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transactional", "Transactional\Transactional.csproj", "{26743FE3-29E7-4B5F-83C8-7E34D07050BA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatalogService.DAL", "CatalogService.DAL\CatalogService.DAL.csproj", "{247D595C-B558-4DC0-94CD-994F2CA7FBC8}"
 EndProject
@@ -39,10 +37,6 @@ Global
 		{914FA2A0-5FAA-48DB-B3EA-5D768109EF9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{914FA2A0-5FAA-48DB-B3EA-5D768109EF9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{914FA2A0-5FAA-48DB-B3EA-5D768109EF9C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{26743FE3-29E7-4B5F-83C8-7E34D07050BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{26743FE3-29E7-4B5F-83C8-7E34D07050BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{26743FE3-29E7-4B5F-83C8-7E34D07050BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{26743FE3-29E7-4B5F-83C8-7E34D07050BA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{247D595C-B558-4DC0-94CD-994F2CA7FBC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{247D595C-B558-4DC0-94CD-994F2CA7FBC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{247D595C-B558-4DC0-94CD-994F2CA7FBC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
