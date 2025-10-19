@@ -4,6 +4,6 @@ namespace CatalogService.Transversal.Interfaces.Base
 {
     public interface IGetProductsByCategory
     {
-        Task<IEnumerable<ProductDTO>> GetProductsByCategory(Guid categoryId);
+        Task<IEnumerable<ProductDTO>> GetProductsByCategoryAsync(Guid categoryId);
     }
 }

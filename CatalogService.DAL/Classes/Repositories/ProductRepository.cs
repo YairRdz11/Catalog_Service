@@ -76,7 +76,7 @@ namespace CatalogService.DAL.Classes.Repositories
             return _mapper.Map<ProductDTO>(productEntity);
         }
 
-        public async Task<IEnumerable<ProductDTO>> GetProductsByCategory(Guid categoryId)
+        public async Task<IEnumerable<ProductDTO>> GetProductsByCategoryAsync(Guid categoryId)
         {
             var products = await _context.Products
                 .Where(p => p.CategoryId == categoryId)
@@ -84,6 +84,15 @@ namespace CatalogService.DAL.Classes.Repositories
                 .ToListAsync();
 
             return _mapper.Map<IEnumerable<ProductDTO>>(products);
+        }
+
+        public async Task<bool> DoesItemExistByNameAsync(string name)
+        {
+            var normalized = name.Trim().ToUpperInvariant();
+
+            var entity = await _context.Products.FirstOrDefaultAsync(c => c.Name.ToUpper() == normalized);
+
+            return entity != null;
         }
     }
 }

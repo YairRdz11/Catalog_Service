@@ -3,6 +3,7 @@ using CatalogService.Transversal.Classes.Dtos;
 using CatalogService.Transversal.Classes.Exceptions;
 using CatalogService.Transversal.Interfaces.BL;
 using CatalogService.Transversal.Interfaces.DAL;
+using System.Xml.Linq;
 using Utilities.Classes.Common;
 
 namespace CatalogService.BLL.Classes
@@ -21,14 +22,14 @@ namespace CatalogService.BLL.Classes
         public async Task<CategoryDTO> CreateAsync(CategoryDTO entity)
         {
             entity.Id = Guid.NewGuid();
-            ValidateCategory(entity);
+            await ValidateCategory(entity);
 
             if (entity.ParentCategoryId != Guid.Empty)
             {
                 var parentCategory = await _categoryRepository.GetByIdAsync(entity.ParentCategoryId);
             }
             var result = await _categoryRepository.CreateAsync(entity);
-            
+
             return result;
         }
 
@@ -41,7 +42,7 @@ namespace CatalogService.BLL.Classes
         {
             var category = await _categoryRepository.GetByIdAsync(id);
 
-            var productsByCategory = await _productRepository.GetProductsByCategory(id);
+            var productsByCategory = await _productRepository.GetProductsByCategoryAsync(id);
 
             category.Products = productsByCategory;
 
@@ -65,7 +66,7 @@ namespace CatalogService.BLL.Classes
             return result;
         }
 
-        private void ValidateCategory(CategoryDTO category)
+        private async Task ValidateCategory(CategoryDTO category)
         {
             var validator = new CategoryValidator();
             validator.CategoryValidate();
@@ -80,6 +81,21 @@ namespace CatalogService.BLL.Classes
                     MessageOrigin = "CategoryValidator"
                 }).ToList();
 
+                throw new ValidateException(errorList);
+            }
+
+            if (await _categoryRepository.DoesItemExistByNameAsync(category.Name))
+            {
+                var errorList = new List<RuleError>
+                {
+                    new RuleError
+                    {
+                        ErrorMessage = $"Category with name '{category.Name}' already exists.",
+                        PropertyName = "Name",
+                        AttempedValue = category.Name,
+                        MessageOrigin = "CategoryService"
+                    }
+                };
                 throw new ValidateException(errorList);
             }
         }

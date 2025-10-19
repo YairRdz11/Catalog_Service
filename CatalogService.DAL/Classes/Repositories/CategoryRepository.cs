@@ -77,5 +77,14 @@ namespace CatalogService.DAL.Classes.Repositories
 
             return _mapper.Map<CategoryDTO>(entityToUpdate);
         }
+
+        public async Task<bool> DoesItemExistByNameAsync(string name)
+        {
+            var normalized = name.Trim().ToUpperInvariant();
+
+            var entity = await _context.Categories.FirstOrDefaultAsync(c => c.Name.ToUpper() == normalized);
+
+            return entity != null;
+        }
     }
 }

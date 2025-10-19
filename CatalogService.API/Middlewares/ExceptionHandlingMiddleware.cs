@@ -1,5 +1,4 @@
 ﻿using CatalogService.Transversal.Classes.Exceptions;
-using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 using Utilities.Classes.Common;
 
@@ -64,7 +63,7 @@ namespace CatalogService.API.Middlewares
         private static int MapStatusCode(Exception ex) =>
         ex switch
         {
-            ValidationException => StatusCodes.Status400BadRequest,
+            ValidateException => StatusCodes.Status400BadRequest,
             NotFoundException => StatusCodes.Status404NotFound,
             UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
             DomainException => StatusCodes.Status422UnprocessableEntity,
@@ -74,7 +73,7 @@ namespace CatalogService.API.Middlewares
         private static string GetTitle(Exception ex) =>
        ex switch
        {
-           ValidationException => "Validation Error",
+           ValidateException => "Validation Error",
            NotFoundException => "Resource Not Found",
            UnauthorizedAccessException => "Unauthorized",
            DomainException => "Domain Error",
