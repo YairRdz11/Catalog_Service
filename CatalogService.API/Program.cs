@@ -1,4 +1,3 @@
-using CatalogService.API.Middlewares;
 using CatalogService.BLL.Classes;
 using CatalogService.DAL.Classes.Extensions;
 using CatalogService.DAL.Classes.Mapping;
@@ -7,6 +6,7 @@ using CatalogService.Transversal.Interfaces.BL;
 using CatalogService.Transversal.Interfaces.DAL;
 using CatalogService.Transversal.Mappings;
 using Microsoft.EntityFrameworkCore;
+using YairUtilities.ApiUtilities.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 

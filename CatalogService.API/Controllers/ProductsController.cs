@@ -1,10 +1,10 @@
-﻿using ApiUtilities.Classes.Common;
-using AutoMapper;
+﻿using AutoMapper;
 using CatalogService.Transversal.Classes.Dtos;
 using CatalogService.Transversal.Classes.Models;
 using CatalogService.Transversal.Interfaces.BL;
 using Microsoft.AspNetCore.Mvc;
-using Utilities.Classes.Common;
+using YairUtilities.ApiUtilities.Classes.Common;
+using YairUtilities.CommonUtilities.Classes.Common;
 
 namespace CatalogService.API.Controllers
 {

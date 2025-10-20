@@ -15,10 +15,10 @@
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.10" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+    <PackageReference Include="YairUtilities.ApiUtilities" Version="1.0.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ApiUtilities\ApiUtilities.csproj" />
     <ProjectReference Include="..\CatalogService.BLL\CatalogService.BLL.csproj" />
     <ProjectReference Include="..\CatalogService.DAL\CatalogService.DAL.csproj" />
     <ProjectReference Include="..\Transversal\CatalogService.Transversal.csproj" />
