@@ -5,7 +5,7 @@ VisualStudioVersion = 17.14.36603.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatalogService.API", "CatalogService.API\CatalogService.API.csproj", "{F10A39A9-A4B9-44EA-864E-2547C75C6E0C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatalogService.Transversal", "Transversal\CatalogService.Transversal.csproj", "{914FA2A0-5FAA-48DB-B3EA-5D768109EF9C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatalogService.Transversal", "CatalogService.Transversal\CatalogService.Transversal.csproj", "{914FA2A0-5FAA-48DB-B3EA-5D768109EF9C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatalogService.DAL", "CatalogService.DAL\CatalogService.DAL.csproj", "{247D595C-B558-4DC0-94CD-994F2CA7FBC8}"
 EndProject

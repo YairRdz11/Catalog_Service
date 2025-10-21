@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Transversal\CatalogService.Transversal.csproj" />
+    <ProjectReference Include="..\CatalogService.Transversal\CatalogService.Transversal.csproj" />
   </ItemGroup>
 
   <ItemGroup>
