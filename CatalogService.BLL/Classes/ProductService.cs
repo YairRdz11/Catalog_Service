@@ -1,8 +1,8 @@
 ﻿using CatalogService.Transversal.Classes.Dtos;
 using CatalogService.Transversal.Interfaces.BL;
 using CatalogService.Transversal.Interfaces.DAL;
-using YairUtilities.CommonUtilities.Classes.Common;
-using YairUtilities.CommonUtilities.Classes.Exceptions;
+using Common.Utilities.Classes.Common;
+using Common.Utilities.Classes.Exceptions;
 
 namespace CatalogService.BLL.Classes
 {

@@ -2,9 +2,9 @@
 using CatalogService.Transversal.Classes.Dtos;
 using CatalogService.Transversal.Classes.Models;
 using CatalogService.Transversal.Interfaces.BL;
+using Common.ApiUtilities.Classes.Common;
+using Common.Utilities.Classes.Common;
 using Microsoft.AspNetCore.Mvc;
-using YairUtilities.ApiUtilities.Classes.Common;
-using YairUtilities.CommonUtilities.Classes.Common;
 
 namespace CatalogService.API.Controllers
 {

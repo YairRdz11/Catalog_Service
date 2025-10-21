@@ -3,8 +3,8 @@ using CatalogService.DAL.Classes.Data;
 using CatalogService.DAL.Classes.Data.Entities;
 using CatalogService.Transversal.Classes.Dtos;
 using CatalogService.Transversal.Interfaces.DAL;
+using Common.Utilities.Classes.Exceptions;
 using Microsoft.EntityFrameworkCore;
-using YairUtilities.CommonUtilities.Classes.Exceptions;
 
 namespace CatalogService.DAL.Classes.Repositories
 {

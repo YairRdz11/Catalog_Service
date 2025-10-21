@@ -5,8 +5,8 @@ using CatalogService.DAL.Classes.Repositories;
 using CatalogService.Transversal.Interfaces.BL;
 using CatalogService.Transversal.Interfaces.DAL;
 using CatalogService.Transversal.Mappings;
+using Common.ApiUtilities.Middleware;
 using Microsoft.EntityFrameworkCore;
-using YairUtilities.ApiUtilities.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
