@@ -34,11 +34,6 @@ namespace CatalogService.DAL.Classes.Repositories
         public async Task<CategoryDTO> CreateAsync(CategoryDTO categoryDTO)
         {
             var entity = _mapper.Map<Category>(categoryDTO);
-            // Ensure a new identifier is generated when none provided (Guid.Empty)
-            if (entity.Id == Guid.Empty)
-            {
-                entity.Id = Guid.NewGuid();
-            }
             _context.Categories.Add(entity);
             await _context.SaveChangesAsync();
 
