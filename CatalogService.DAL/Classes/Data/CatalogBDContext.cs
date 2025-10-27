@@ -1,7 +1,5 @@
 ﻿using CatalogService.DAL.Classes.Data.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic;
-using System.Threading;
 
 namespace CatalogService.DAL.Classes.Data
 {
@@ -11,7 +9,11 @@ namespace CatalogService.DAL.Classes.Data
         public CatalogBDContext(DbContextOptions<CatalogBDContext> options) : base(options)
         {
             this.ChangeTracker.LazyLoadingEnabled = false;
-            this.Database.SetCommandTimeout(50);
+            // Only set command timeout for relational providers (InMemory will throw)
+            if (this.Database.IsRelational())
+            {
+                this.Database.SetCommandTimeout(50);
+            }
         }
 
         public DbSet<Category> Categories { get; set; }
