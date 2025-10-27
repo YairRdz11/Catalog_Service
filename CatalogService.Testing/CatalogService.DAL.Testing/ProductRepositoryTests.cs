@@ -8,7 +8,7 @@ using Common.Utilities.Classes.Exceptions;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 
-namespace CatalogService.DAL.Tests.Classes.Repositories
+namespace CatalogService.Testing.CatalogService.DAL.Testing
 {
     public class ProductRepositoryTests
     {
