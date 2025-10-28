@@ -30,7 +30,7 @@ namespace CatalogService.DAL.Classes.Data
                 .HasOne(c => c.ParentCategory)
                 .WithMany()
                 .HasForeignKey(c => c.ParentCategoryId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Product>()
                 .Property(p => p.Price)

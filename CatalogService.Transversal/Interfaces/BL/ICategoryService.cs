@@ -3,7 +3,7 @@ using CatalogService.Transversal.Interfaces.Base;
 
 namespace CatalogService.Transversal.Interfaces.BL
 {
-    public interface ICategoryService : ICrudBase<CategoryDTO>
+    public interface ICategoryService : ICrudBase<CategoryDTO>, IGetList<CategoryDTO>
     {
     }
 }

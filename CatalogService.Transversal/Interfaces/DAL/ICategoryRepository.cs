@@ -3,7 +3,7 @@ using CatalogService.Transversal.Interfaces.Base;
 
 namespace CatalogService.Transversal.Interfaces.DAL
 {
-    public interface ICategoryRepository : ICrudBase<CategoryDTO>, IGetByNameAsync
+    public interface ICategoryRepository : ICrudBase<CategoryDTO>, IGetList<CategoryDTO>,IGetByNameAsync
     {
     }
 }

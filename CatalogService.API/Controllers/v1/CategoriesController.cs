@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Asp.Versioning;
+using AutoMapper;
 using CatalogService.Transversal.Classes.Dtos;
 using CatalogService.Transversal.Classes.Models;
 using CatalogService.Transversal.Interfaces.BL;
@@ -6,10 +7,11 @@ using Common.ApiUtilities.Classes.Common;
 using Common.Utilities.Classes.Common;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CatalogService.API.Controllers
+namespace CatalogService.API.Controllers.v1
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/v{version:apiVersion}/[controller]")]
+    [ApiVersion("1.0")]
     public class CategoriesController : ApiControllerBase
     {
         private readonly ICategoryService _service;

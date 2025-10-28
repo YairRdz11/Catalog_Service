@@ -1,4 +1,6 @@
-﻿namespace CatalogService.Transversal.Interfaces.Base
+﻿using Common.Utilities.Classes.Common;
+
+namespace CatalogService.Transversal.Interfaces.Base
 {
     public interface ICrudBase<T> where T : class
     {
@@ -6,6 +8,5 @@
         Task<T> UpdateAsync(T entity);
         Task<T> GetByIdAsync(Guid id);
         Task<T> DeleteAsync(Guid id);
-        Task<IEnumerable<T>> GetListAsync();
     }
 }

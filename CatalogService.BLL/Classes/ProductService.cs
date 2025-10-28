@@ -75,9 +75,10 @@ namespace CatalogService.BLL.Classes
             return product;
         }
 
-        public async Task<IEnumerable<ProductDTO>> GetListAsync()
+        public async Task<IEnumerable<ProductDTO>> GetListAsync(PaginationParams paginationParams)
         {
-            var products = await _repository.GetListAsync();
+
+            var products = await _repository.GetListAsync(paginationParams );
 
             foreach(var product in products)
             {

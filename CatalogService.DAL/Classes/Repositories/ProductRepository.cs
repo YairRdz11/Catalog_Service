@@ -3,6 +3,7 @@ using CatalogService.DAL.Classes.Data;
 using CatalogService.DAL.Classes.Data.Entities;
 using CatalogService.Transversal.Classes.Dtos;
 using CatalogService.Transversal.Interfaces.DAL;
+using Common.Utilities.Classes.Common;
 using Common.Utilities.Classes.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
@@ -53,13 +54,6 @@ namespace CatalogService.DAL.Classes.Repositories
             return _mapper.Map<ProductDTO>(entity);
         }
 
-        public async Task<IEnumerable<ProductDTO>> GetListAsync()
-        {
-            var products = await _context.Products.OrderBy(x => x.Name).ToListAsync();
-            
-            return _mapper.Map<IEnumerable<ProductDTO>>(products);
-        }
-
         public async Task<ProductDTO> UpdateAsync(ProductDTO entity)
         {
             var productEntity = await GetProductById(entity.Id);
@@ -91,6 +85,17 @@ namespace CatalogService.DAL.Classes.Repositories
             var entity = await _context.Products.FirstOrDefaultAsync(c => c.Name.ToUpper() == normalized);
 
             return entity != null;
+        }
+
+        public async Task<IEnumerable<ProductDTO>> GetListAsync(PaginationParams paginationParams)
+        {
+            var products = await _context.Products
+                                .OrderBy(p => p.Name)
+                                .Skip((paginationParams.PageNumber - 1) * paginationParams.PageSize)
+                                .Take(paginationParams.PageSize)
+                                .ToListAsync();
+
+            return _mapper.Map<IEnumerable<ProductDTO>>(products);
         }
     }
 }
