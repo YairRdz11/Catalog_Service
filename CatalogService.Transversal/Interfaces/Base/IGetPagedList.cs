@@ -2,8 +2,8 @@
 
 namespace CatalogService.Transversal.Interfaces.Base
 {
-    public interface IGetPagedList<T>
+    public interface IGetPagedList<T, TParams>
     {
-        Task<IEnumerable<T>> GetListAsync(PaginationParams paginationParams);
+        Task<IEnumerable<T>> GetListAsync(TParams paginationParams);
     }
 }

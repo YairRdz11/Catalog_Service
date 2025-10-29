@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using AutoMapper;
 using CatalogService.Transversal.Classes.Dtos;
+using CatalogService.Transversal.Classes.Filters;
 using CatalogService.Transversal.Classes.Models;
 using CatalogService.Transversal.Interfaces.BL;
 using Common.ApiUtilities.Classes.Common;
@@ -24,14 +25,9 @@ namespace CatalogService.API.Controllers.v1
         }
 
         [HttpGet]
-        public async Task<ActionResult<ApiResponse>> GetAllProductsAsync()
+        public async Task<ActionResult<ApiResponse>> GetAllProductsAsync([FromQuery] ProductFilterParams productFilter)
         {
-            var pagination = new PaginationParams
-            {
-                PageNumber = 1,
-                PageSize = 50
-            };
-            IEnumerable<ProductDTO> result = await _service.GetListAsync(pagination);
+            IEnumerable<ProductDTO> result = await _service.GetListAsync(productFilter);
             List<ProductModel> resultModels = _mapper.Map<List<ProductModel>>(result);
 
             return Ok(new ApiResponse

@@ -2,8 +2,8 @@
 using CatalogService.DAL.Classes.Data;
 using CatalogService.DAL.Classes.Data.Entities;
 using CatalogService.Transversal.Classes.Dtos;
+using CatalogService.Transversal.Classes.Filters;
 using CatalogService.Transversal.Interfaces.DAL;
-using Common.Utilities.Classes.Common;
 using Common.Utilities.Classes.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
@@ -68,16 +68,6 @@ namespace CatalogService.DAL.Classes.Repositories
             return _mapper.Map<ProductDTO>(productEntity);
         }
 
-        public async Task<IEnumerable<ProductDTO>> GetProductsByCategoryAsync(Guid categoryId)
-        {
-            var products = await _context.Products
-                .Where(p => p.CategoryId == categoryId)
-                .OrderBy(p => p.Name)
-                .ToListAsync();
-
-            return _mapper.Map<IEnumerable<ProductDTO>>(products);
-        }
-
         public async Task<bool> DoesItemExistByNameAsync(string name)
         {
             var normalized = name.Trim().ToUpperInvariant();
@@ -87,13 +77,22 @@ namespace CatalogService.DAL.Classes.Repositories
             return entity != null;
         }
 
-        public async Task<IEnumerable<ProductDTO>> GetListAsync(PaginationParams paginationParams)
+        public async Task<IEnumerable<ProductDTO>> GetListAsync(ProductFilterParams filter)
         {
-            var products = await _context.Products
-                                .OrderBy(p => p.Name)
-                                .Skip((paginationParams.PageNumber - 1) * paginationParams.PageSize)
-                                .Take(paginationParams.PageSize)
-                                .ToListAsync();
+            var pageNumber = filter.PageNumber < 1 ? 1 : filter.PageNumber;
+            var pageSize = filter.PageSize < 1 ? 10 : (filter.PageSize > 100 ? 100 : filter.PageSize);
+            var query = _context.Products.AsQueryable();
+
+            if (filter.CategoryId.HasValue)
+            {
+                query = query.Where(p => p.CategoryId == filter.CategoryId.Value);
+            }
+
+            query = query.OrderBy(p => p.Name)
+                         .Skip((pageNumber - 1) * pageSize)
+                         .Take(pageSize);
+
+            var products = await query.ToListAsync();
 
             return _mapper.Map<IEnumerable<ProductDTO>>(products);
         }

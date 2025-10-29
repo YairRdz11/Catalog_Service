@@ -41,10 +41,6 @@ namespace CatalogService.BLL.Classes
         {
             var category = await _categoryRepository.GetByIdAsync(id);
 
-            var productsByCategory = await _productRepository.GetProductsByCategoryAsync(id);
-
-            category.Products = productsByCategory;
-
             return category;
         }
 
@@ -56,7 +52,7 @@ namespace CatalogService.BLL.Classes
         public async Task<CategoryDTO> UpdateAsync(CategoryDTO categoryDTO)
         {
             var entity = await _categoryRepository.GetByIdAsync(categoryDTO.Id);
-            ValidateCategory(categoryDTO);
+            await ValidateCategory(categoryDTO);
             if (categoryDTO.ParentCategoryId != Guid.Empty)
             {
                 var parentCategory = await _categoryRepository.GetByIdAsync(categoryDTO.ParentCategoryId);

@@ -1,4 +1,5 @@
 ﻿using CatalogService.Transversal.Classes.Dtos;
+using CatalogService.Transversal.Classes.Filters;
 using CatalogService.Transversal.Interfaces.BL;
 using CatalogService.Transversal.Interfaces.DAL;
 using Common.Utilities.Classes.Common;
@@ -75,10 +76,13 @@ namespace CatalogService.BLL.Classes
             return product;
         }
 
-        public async Task<IEnumerable<ProductDTO>> GetListAsync(PaginationParams paginationParams)
+        public async Task<IEnumerable<ProductDTO>> GetListAsync(ProductFilterParams filter)
         {
-
-            var products = await _repository.GetListAsync(paginationParams );
+            if(filter.CategoryId.HasValue)
+            {
+                var category = await _categoryRepository.GetByIdAsync(filter.CategoryId.Value);
+            }
+            var products = await _repository.GetListAsync(filter);
 
             foreach(var product in products)
             {
@@ -91,7 +95,7 @@ namespace CatalogService.BLL.Classes
 
         public async Task<ProductDTO> UpdateAsync(ProductDTO entity)
         {
-            ValidateProduct(entity);
+            await ValidateProduct(entity);
             var product = await _repository.GetByIdAsync(entity.Id);
             var category = await _categoryRepository.GetByIdAsync(entity.CategoryId);
             var result = await _repository.UpdateAsync(entity);
