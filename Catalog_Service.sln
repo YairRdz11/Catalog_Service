@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatalogService.BLL", "Catal
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatalogService.Testing", "CatalogService.Testing\CatalogService.Testing.csproj", "{2D030910-8B21-4ED5-AAC1-419B860F0793}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01.API", "01.API", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02.Tests", "02.Tests", "{FF1C0FFF-17E0-4BB1-8B49-DCA48531FACB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +46,13 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F10A39A9-A4B9-44EA-864E-2547C75C6E0C} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{914FA2A0-5FAA-48DB-B3EA-5D768109EF9C} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{247D595C-B558-4DC0-94CD-994F2CA7FBC8} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{76DA9662-9B30-4A36-A829-4E231C9C9C7F} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{2D030910-8B21-4ED5-AAC1-419B860F0793} = {FF1C0FFF-17E0-4BB1-8B49-DCA48531FACB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F90DB401-60CA-4492-9F46-74FAA3C97FBD}
