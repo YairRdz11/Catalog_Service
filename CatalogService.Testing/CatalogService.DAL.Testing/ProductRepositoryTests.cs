@@ -4,6 +4,7 @@ using CatalogService.DAL.Classes.Data.Entities;
 using CatalogService.DAL.Classes.Mapping;
 using CatalogService.DAL.Classes.Repositories;
 using CatalogService.Transversal.Classes.Dtos;
+using CatalogService.Transversal.Classes.Filters; // added
 using Common.Utilities.Classes.Exceptions;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
@@ -82,7 +83,7 @@ namespace CatalogService.Testing.CatalogService.DAL.Testing
         }
 
         [Fact]
-        public async Task GetListAsync_ShouldReturnOrderedProducts()
+        public async Task GetListAsync_ShouldReturnOrderedPagedProducts()
         {
             var repo = CreateRepository(out var context);
             var category = new Category { Id = Guid.NewGuid(), Name = "Cat" };
@@ -94,9 +95,30 @@ namespace CatalogService.Testing.CatalogService.DAL.Testing
             );
             await context.SaveChangesAsync();
 
-            var list = await repo.GetListAsync();
+            var filter = new ProductFilterParams { PageNumber =1, PageSize =10 };
+            var list = await repo.GetListAsync(filter);
             list.Should().HaveCount(3);
             list.Select(p => p.Name).Should().ContainInOrder("Alpha", "Middle", "Zeta");
+        }
+
+        [Fact]
+        public async Task GetListAsync_WithCategoryFilter_ShouldReturnOnlyCategory()
+        {
+            var repo = CreateRepository(out var context);
+            var cat1 = new Category { Id = Guid.NewGuid(), Name = "Cat1" };
+            var cat2 = new Category { Id = Guid.NewGuid(), Name = "Cat2" };
+            context.Categories.AddRange(cat1, cat2);
+            context.Products.AddRange(
+            new Product { Id = Guid.NewGuid(), Name = "A", CategoryId = cat1.Id },
+            new Product { Id = Guid.NewGuid(), Name = "B", CategoryId = cat1.Id },
+            new Product { Id = Guid.NewGuid(), Name = "C", CategoryId = cat2.Id }
+            );
+            await context.SaveChangesAsync();
+
+            var filter = new ProductFilterParams { CategoryId = cat1.Id, PageNumber =1, PageSize =10 };
+            var list = await repo.GetListAsync(filter);
+            list.Should().HaveCount(2);
+            list.All(p => p.CategoryId == cat1.Id).Should().BeTrue();
         }
 
         [Fact]
@@ -151,25 +173,6 @@ namespace CatalogService.Testing.CatalogService.DAL.Testing
             var repo = CreateRepository(out _);
             Func<Task> act = () => repo.DeleteAsync(Guid.NewGuid());
             await act.Should().ThrowAsync<NotFoundException>();
-        }
-
-        [Fact]
-        public async Task GetProductsByCategoryAsync_ShouldReturnOnlyMatchingCategory()
-        {
-            var repo = CreateRepository(out var context);
-            var cat1 = new Category { Id = Guid.NewGuid(), Name = "Cat1" };
-            var cat2 = new Category { Id = Guid.NewGuid(), Name = "Cat2" };
-            context.Categories.AddRange(cat1, cat2);
-            context.Products.AddRange(
-            new Product { Id = Guid.NewGuid(), Name = "A", CategoryId = cat1.Id },
-            new Product { Id = Guid.NewGuid(), Name = "B", CategoryId = cat1.Id },
-            new Product { Id = Guid.NewGuid(), Name = "C", CategoryId = cat2.Id }
-            );
-            await context.SaveChangesAsync();
-
-            var list = await repo.GetProductsByCategoryAsync(cat1.Id);
-            list.Should().HaveCount(2);
-            list.All(p => p.CategoryId == cat1.Id).Should().BeTrue();
         }
 
         [Fact]

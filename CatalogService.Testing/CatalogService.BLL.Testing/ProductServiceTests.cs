@@ -1,5 +1,6 @@
 using CatalogService.BLL.Classes;
 using CatalogService.Transversal.Classes.Dtos;
+using CatalogService.Transversal.Classes.Filters; // added for ProductFilterParams
 using CatalogService.Transversal.Interfaces.DAL;
 using Common.Utilities.Classes.Exceptions;
 using FluentAssertions;
@@ -430,7 +431,7 @@ namespace CatalogService.Testing.CatalogService.BLL.Testing
             var category2 = new CategoryDTO { Id = category2Id, Name = "Books" };
 
             _mockProductRepository
-                .Setup(r => r.GetListAsync())
+                .Setup(r => r.GetListAsync(It.IsAny<ProductFilterParams>()))
                 .ReturnsAsync(products);
 
             _mockCategoryRepository
@@ -441,8 +442,10 @@ namespace CatalogService.Testing.CatalogService.BLL.Testing
                 .Setup(r => r.GetByIdAsync(category2Id))
                 .ReturnsAsync(category2);
 
+            var filter = new ProductFilterParams { PageNumber =1, PageSize =20 };
+
             // Act
-            var result = await _productService.GetListAsync();
+            var result = await _productService.GetListAsync(filter);
 
             // Assert
             result.Should().NotBeNull();
@@ -457,11 +460,13 @@ namespace CatalogService.Testing.CatalogService.BLL.Testing
         {
             // Arrange
             _mockProductRepository
-                .Setup(r => r.GetListAsync())
+                .Setup(r => r.GetListAsync(It.IsAny<ProductFilterParams>()))
                 .ReturnsAsync(new List<ProductDTO>());
 
+            var filter = new ProductFilterParams { PageNumber =1, PageSize =10 };
+
             // Act
-            var result = await _productService.GetListAsync();
+            var result = await _productService.GetListAsync(filter);
 
             // Assert
             result.Should().NotBeNull();
@@ -483,15 +488,17 @@ namespace CatalogService.Testing.CatalogService.BLL.Testing
             var category = new CategoryDTO { Id = categoryId, Name = "Electronics" };
 
             _mockProductRepository
-                .Setup(r => r.GetListAsync())
+                .Setup(r => r.GetListAsync(It.IsAny<ProductFilterParams>()))
                 .ReturnsAsync(products);
 
             _mockCategoryRepository
                 .Setup(r => r.GetByIdAsync(categoryId))
                 .ReturnsAsync(category);
 
+            var filter = new ProductFilterParams { PageNumber =1, PageSize =50 };
+
             // Act
-            var result = await _productService.GetListAsync();
+            var result = await _productService.GetListAsync(filter);
 
             // Assert
             result.Should().HaveCount(3);
@@ -592,11 +599,10 @@ namespace CatalogService.Testing.CatalogService.BLL.Testing
                 .ReturnsAsync(updatedProduct);
 
             // Act
-            var result = await _productService.UpdateAsync(updatedProduct);
+            Func<Task> act = async () => await _productService.UpdateAsync(updatedProduct);
 
             // Assert
-            result.Should().NotBeNull();
-            _mockProductRepository.Verify(r => r.UpdateAsync(It.IsAny<ProductDTO>()), Times.Once);
+            await act.Should().ThrowAsync<ValidateException>();
         }
 
         [Fact]

@@ -1,5 +1,6 @@
 using CatalogService.BLL.Classes;
 using CatalogService.Transversal.Classes.Dtos;
+using CatalogService.Transversal.Classes.Filters; // for ProductFilterParams
 using CatalogService.Transversal.Interfaces.DAL;
 using Common.Utilities.Classes.Exceptions;
 using FluentAssertions;
@@ -218,19 +219,9 @@ namespace CatalogService.Testing.CatalogService.BLL.Testing
                 Description = "Electronic items"
             };
 
-            var products = new List<ProductDTO>
-            {
-                new ProductDTO { Id = Guid.NewGuid(), Name = "Laptop", CategoryId = categoryId },
-                new ProductDTO { Id = Guid.NewGuid(), Name = "Phone", CategoryId = categoryId }
-            };
-
             _mockCategoryRepository
                 .Setup(r => r.GetByIdAsync(categoryId))
                 .ReturnsAsync(categoryDTO);
-
-            _mockProductRepository
-                .Setup(r => r.GetProductsByCategoryAsync(categoryId))
-                .ReturnsAsync(products);
 
             // Act
             var result = await _categoryService.GetByIdAsync(categoryId);
@@ -239,9 +230,6 @@ namespace CatalogService.Testing.CatalogService.BLL.Testing
             result.Should().NotBeNull();
             result.Id.Should().Be(categoryId);
             result.Name.Should().Be("Electronics");
-            result.Products.Should().HaveCount(2);
-            result.Products.Should().Contain(p => p.Name == "Laptop");
-            result.Products.Should().Contain(p => p.Name == "Phone");
         }
 
         [Fact]
@@ -434,12 +422,10 @@ namespace CatalogService.Testing.CatalogService.BLL.Testing
                 .Setup(r => r.UpdateAsync(It.IsAny<CategoryDTO>()))
                 .ReturnsAsync(updatedCategory);
             // Act
-            var result = await _categoryService.UpdateAsync(updatedCategory);
+            Func<Task> act = async () => await _categoryService.UpdateAsync(updatedCategory);
 
             // Assert
-            // This documents the current buggy behavior - it should throw but doesn't
-            result.Should().NotBeNull();
-            _mockCategoryRepository.Verify(r => r.UpdateAsync(It.IsAny<CategoryDTO>()), Times.Once);
+            await act.Should().ThrowAsync<ValidateException>();
         }
 
         [Fact]
@@ -585,17 +571,11 @@ namespace CatalogService.Testing.CatalogService.BLL.Testing
                 .Setup(r => r.GetByIdAsync(categoryId))
                 .ReturnsAsync(categoryDTO);
 
-            _mockProductRepository
-                .Setup(r => r.GetProductsByCategoryAsync(categoryId))
-                .ReturnsAsync(new List<ProductDTO>());
-
             // Act
             var result = await _categoryService.GetByIdAsync(categoryId);
 
             // Assert
             result.Should().NotBeNull();
-            result.Products.Should().NotBeNull();
-            result.Products.Should().BeEmpty();
         }
 
         [Theory]
