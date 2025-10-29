@@ -30,4 +30,8 @@
     <ProjectReference Include="..\CatalogService.Transversal\CatalogService.Transversal.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="IntegrationTesting\" />
+  </ItemGroup>
+
 </Project>

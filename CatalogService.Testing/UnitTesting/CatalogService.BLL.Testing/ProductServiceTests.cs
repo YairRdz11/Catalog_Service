@@ -6,7 +6,7 @@ using Common.Utilities.Classes.Exceptions;
 using FluentAssertions;
 using Moq;
 
-namespace CatalogService.Testing.CatalogService.BLL.Testing
+namespace CatalogService.Testing.UnitTesting.CatalogService.BLL.Testing
 {
     public class ProductServiceTests
     {

@@ -1,12 +1,11 @@
 using CatalogService.BLL.Classes;
 using CatalogService.Transversal.Classes.Dtos;
-using CatalogService.Transversal.Classes.Filters; // for ProductFilterParams
 using CatalogService.Transversal.Interfaces.DAL;
 using Common.Utilities.Classes.Exceptions;
 using FluentAssertions;
 using Moq;
 
-namespace CatalogService.Testing.CatalogService.BLL.Testing
+namespace CatalogService.Testing.UnitTesting.CatalogService.BLL.Testing
 {
     public class CategoryServiceTests
     {
