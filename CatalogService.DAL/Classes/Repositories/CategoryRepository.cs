@@ -2,7 +2,9 @@
 using CatalogService.DAL.Classes.Data;
 using CatalogService.DAL.Classes.Data.Entities;
 using CatalogService.Transversal.Classes.Dtos;
+using CatalogService.Transversal.Classes.Events;
 using CatalogService.Transversal.Interfaces.DAL;
+using CatalogService.Transversal.Interfaces.Events;
 using Common.Utilities.Classes.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,11 +14,13 @@ namespace CatalogService.DAL.Classes.Repositories
     {
         private readonly CatalogBDContext _context;
         private readonly IMapper _mapper;
+        private readonly IRabbitMqPublisher _publisher;
 
-        public CategoryRepository(CatalogBDContext context, IMapper mapper)
+        public CategoryRepository(CatalogBDContext context, IMapper mapper, IRabbitMqPublisher publisher)
         {
             _context = context;
             _mapper = mapper;
+            _publisher = publisher;
         }
 
         private async Task<Category> GetCategoryById(Guid id)
@@ -73,6 +77,10 @@ namespace CatalogService.DAL.Classes.Repositories
             entityToUpdate.URL = entity.URL;
             entityToUpdate.ParentCategoryId = entity.ParentCategoryId != Guid.Empty ? entity.ParentCategoryId : null;
             await _context.SaveChangesAsync();
+
+            // Publish CategoryUpdatedEvent
+            var eventMessage = new CategoryUpdatedEvent(entityToUpdate.Id, entityToUpdate.Name);
+            await _publisher.PublishAsync(eventMessage, "category.updated");
 
             return _mapper.Map<CategoryDTO>(entityToUpdate);
         }

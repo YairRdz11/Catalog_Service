@@ -3,8 +3,10 @@ using CatalogService.BLL.Classes;
 using CatalogService.DAL.Classes.Extensions;
 using CatalogService.DAL.Classes.Mapping;
 using CatalogService.DAL.Classes.Repositories;
+using CatalogService.DAL.Messaging;
 using CatalogService.Transversal.Interfaces.BL;
 using CatalogService.Transversal.Interfaces.DAL;
+using CatalogService.Transversal.Interfaces.Events;
 using CatalogService.Transversal.Mappings;
 using Common.ApiUtilities.Middleware;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +33,10 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
+// Add RabbitMQ Publisher configuration
+builder.Services.Configure<RabbitMqOptions>(builder.Configuration.GetSection("RabbitMq"));
+builder.Services.AddSingleton<IRabbitMqPublisher, RabbitMqPublisher>();
 
 builder.Services.AddSwaggerGen(options =>
 {

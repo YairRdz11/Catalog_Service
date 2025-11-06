@@ -2,8 +2,10 @@
 using CatalogService.DAL.Classes.Data;
 using CatalogService.DAL.Classes.Data.Entities;
 using CatalogService.Transversal.Classes.Dtos;
+using CatalogService.Transversal.Classes.Events;
 using CatalogService.Transversal.Classes.Filters;
 using CatalogService.Transversal.Interfaces.DAL;
+using CatalogService.Transversal.Interfaces.Events;
 using Common.Utilities.Classes.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,11 +15,13 @@ namespace CatalogService.DAL.Classes.Repositories
     {
         private readonly CatalogBDContext _context;
         private readonly IMapper _mapper;
+        private readonly IRabbitMqPublisher _publisher;
 
-        public ProductRepository(CatalogBDContext context, IMapper mapper)
+        public ProductRepository(CatalogBDContext context, IMapper mapper, IRabbitMqPublisher publisher)
         {
             _context = context;
             _mapper = mapper;
+            _publisher = publisher;
         }
 
         private async Task<Product> GetProductById(Guid id)
@@ -43,6 +47,11 @@ namespace CatalogService.DAL.Classes.Repositories
             var entity = await GetProductById(id);
             _context.Products.Remove(entity);
             await _context.SaveChangesAsync();
+
+            var deletedEvent = new ProductDeletedEvent(entity.Id);
+
+            await _publisher.PublishAsync(deletedEvent, "product.deleted");
+
             var productDTO = _mapper.Map<ProductDTO>(entity);
             return productDTO;
         }
@@ -65,6 +74,17 @@ namespace CatalogService.DAL.Classes.Repositories
             productEntity.Amount = entity.Amount;
             productEntity.CategoryId = entity.CategoryId;
             await _context.SaveChangesAsync();
+
+            var uodatedEvent = new ProductUpdatedEvent(
+                ProductId: productEntity.Id,
+                Name: productEntity.Name,
+                Price: productEntity.Price,
+                CategoryId: productEntity.CategoryId,
+                CategoryName: null // Optionally, fetch and include the category name if needed
+            );
+
+            await _publisher.PublishAsync(uodatedEvent, "product.updated");
+
             return _mapper.Map<ProductDTO>(productEntity);
         }
 
