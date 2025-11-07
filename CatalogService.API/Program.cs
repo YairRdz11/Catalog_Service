@@ -38,6 +38,8 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.Configure<RabbitMqOptions>(builder.Configuration.GetSection("RabbitMq"));
 builder.Services.AddSingleton<IRabbitMqPublisher, RabbitMqPublisher>();
 
+builder.Services.AddHostedService<OutboxProcessorHostedService>();
+
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new() { Title = "Catalog API", Version = "v1" });

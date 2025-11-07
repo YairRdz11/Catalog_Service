@@ -18,6 +18,7 @@ namespace CatalogService.DAL.Classes.Data
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<OutboxEvent> OutboxEvents { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -35,6 +36,13 @@ namespace CatalogService.DAL.Classes.Data
             modelBuilder.Entity<Product>()
                 .Property(p => p.Price)
                 .HasPrecision(18, 2);
+
+            modelBuilder.Entity<OutboxEvent>(e =>
+            {
+                e.ToTable("OutboxEvents");
+                e.HasIndex(x => new { x.Status, x.OccurredOnUtc });
+                e.Property(x => x.Status).HasConversion<int>();
+            });
         }
     }
 }
