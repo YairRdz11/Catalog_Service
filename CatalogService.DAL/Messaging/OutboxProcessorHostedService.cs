@@ -124,7 +124,6 @@ namespace CatalogService.DAL.Messaging
 
         private static IIntegrationEvent Deserialize(OutboxEvent outbox)
         {
-            // You may want a type discriminator map instead of EventType reflection
 
             var type = Type.GetType(outbox.EventType);
             if (type == null)

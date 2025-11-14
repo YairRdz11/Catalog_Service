@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
+using System.Text;
 using System.Text.Json;
 
 namespace CatalogService.DAL.Messaging
@@ -32,16 +33,18 @@ namespace CatalogService.DAL.Messaging
             _channel = _connection.CreateChannelAsync().GetAwaiter().GetResult();
 
             _channel
-                .ExchangeDeclareAsync(exchange: _options.Exchange, type: ExchangeType.Topic, durable: true, autoDelete: false)
+                .ExchangeDeclareAsync(exchange: _options.Exchange, type: ExchangeType.Fanout, durable: true, autoDelete: false)
                 .GetAwaiter()
                 .GetResult();
         }
 
         public async Task PublishAsync(IIntegrationEvent @event, string routingKey, CancellationToken ct = default)
         {
-            var body = JsonSerializer.SerializeToUtf8Bytes(@event, JsonOpts);
+            var body = JsonSerializer.SerializeToUtf8Bytes(@event, @event.GetType(), JsonOpts);
+            var json = Encoding.UTF8.GetString(body);
 
-            await _channel.BasicPublishAsync(exchange: _options.Exchange, routingKey: routingKey, body: body);
+            await _channel.BasicPublishAsync(exchange: _options.Exchange, routingKey: string.Empty, body: body);
+            _logger.LogInformation($"Sent {body}");
 
             _logger.LogInformation("Published event {EventType} with id {EventId} routingKey {RoutingKey}", @event.EventType, @event.EventId, routingKey);
         }
