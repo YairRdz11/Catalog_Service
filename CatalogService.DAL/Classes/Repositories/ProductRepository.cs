@@ -5,8 +5,8 @@ using CatalogService.Transversal.Classes.Dtos;
 using CatalogService.Transversal.Classes.Events;
 using CatalogService.Transversal.Classes.Filters;
 using CatalogService.Transversal.Interfaces.DAL;
-using CatalogService.Transversal.Interfaces.Events;
 using Common.Utilities.Classes.Exceptions;
+using Common.Utilities.Interfaces.Messaging.Events;
 using Microsoft.EntityFrameworkCore;
 
 namespace CatalogService.DAL.Classes.Repositories
@@ -15,13 +15,13 @@ namespace CatalogService.DAL.Classes.Repositories
     {
         private readonly CatalogBDContext _context;
         private readonly IMapper _mapper;
-        private readonly IRabbitMqPublisher _publisher;
+        private readonly IOutboxWriter _outboxWriter;
 
-        public ProductRepository(CatalogBDContext context, IMapper mapper, IRabbitMqPublisher publisher)
+        public ProductRepository(CatalogBDContext context, IMapper mapper, IOutboxWriter outboxWriter)
         {
             _context = context;
             _mapper = mapper;
-            _publisher = publisher;
+            _outboxWriter = outboxWriter;
         }
 
         private async Task<Product> GetProductById(Guid id)
@@ -49,8 +49,7 @@ namespace CatalogService.DAL.Classes.Repositories
             await _context.SaveChangesAsync();
 
             var deletedEvent = new ProductDeletedEvent(entity.Id);
-
-            await _publisher.PublishAsync(deletedEvent, "product.deleted");
+            _outboxWriter.Add(deletedEvent, "product.deleted");
 
             var productDTO = _mapper.Map<ProductDTO>(entity);
             return productDTO;
@@ -75,15 +74,14 @@ namespace CatalogService.DAL.Classes.Repositories
             productEntity.CategoryId = entity.CategoryId;
             await _context.SaveChangesAsync();
 
-            var uodatedEvent = new ProductUpdatedEvent(
+            var updatedEvent = new ProductUpdatedEvent(
                 ProductId: productEntity.Id,
                 Name: productEntity.Name,
                 Price: productEntity.Price,
-                CategoryId: productEntity.CategoryId,
-                CategoryName: null // Optionally, fetch and include the category name if needed
+                CategoryId: productEntity.CategoryId
             );
 
-            await _publisher.PublishAsync(uodatedEvent, "product.updated");
+            _outboxWriter.Add(updatedEvent, "product.updated");
 
             return _mapper.Map<ProductDTO>(productEntity);
         }

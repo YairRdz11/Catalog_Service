@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
 using CatalogService.DAL.Classes.Data;
 using CatalogService.DAL.Classes.Data.Entities;
-using CatalogService.DAL.Classes.Data.Enums;
 using CatalogService.Transversal.Classes.Dtos;
 using CatalogService.Transversal.Classes.Events;
 using CatalogService.Transversal.Interfaces.DAL;
-using CatalogService.Transversal.Interfaces.Events;
 using Common.Utilities.Classes.Exceptions;
+using Common.Utilities.Interfaces.Messaging.Events;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 
@@ -16,11 +15,13 @@ namespace CatalogService.DAL.Classes.Repositories
     {
         private readonly CatalogBDContext _context;
         private readonly IMapper _mapper;
+        private readonly IOutboxWriter _outboxWriter;
 
-        public CategoryRepository(CatalogBDContext context, IMapper mapper)
+        public CategoryRepository(CatalogBDContext context, IMapper mapper, IOutboxWriter outboxWriter)
         {
             _context = context;
             _mapper = mapper;
+            _outboxWriter = outboxWriter;
         }
 
         private async Task<Category> GetCategoryById(Guid id)
@@ -79,30 +80,13 @@ namespace CatalogService.DAL.Classes.Repositories
 
             await _context.SaveChangesAsync();
 
-            // Publish CategoryUpdatedEvent
+
             var eventMessage = new CategoryUpdatedEvent(entityToUpdate.Id, entityToUpdate.Name);
-            AddOutboxRecord(eventMessage, "category.updated");
+            _outboxWriter.Add(eventMessage, "category.updated");
 
             await _context.SaveChangesAsync();
 
             return _mapper.Map<CategoryDTO>(entityToUpdate);
-        }
-
-        private void AddOutboxRecord(CategoryUpdatedEvent eventMessage, string routingKey)
-        {
-            var outbox = new OutboxEvent
-            {
-                Id = Guid.NewGuid(),
-                EventType = eventMessage.GetType().AssemblyQualifiedName!,
-                OccurredOnUtc = eventMessage.OccurredOnUtc,
-                Payload = JsonSerializer.Serialize(eventMessage),
-                RoutingKey = routingKey,
-                Version = eventMessage.Version,
-                Attempts = 0,
-                Status = OutboxEventStatus.Pending
-            };
-
-            _context.OutboxEvents.Add(outbox);
         }
 
         public async Task<bool> DoesItemExistByNameAsync(string name)

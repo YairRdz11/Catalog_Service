@@ -6,9 +6,11 @@ using CatalogService.DAL.Classes.Repositories;
 using CatalogService.DAL.Messaging;
 using CatalogService.Transversal.Interfaces.BL;
 using CatalogService.Transversal.Interfaces.DAL;
-using CatalogService.Transversal.Interfaces.Events;
 using CatalogService.Transversal.Mappings;
 using Common.ApiUtilities.Middleware;
+using Common.Utilities.Classes.Messaging;
+using Common.Utilities.Classes.Messaging.Publisher;
+using Common.Utilities.Interfaces.Messaging.Events;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,6 +35,7 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IOutboxWriter, OutboxWriter>();
 
 // Add RabbitMQ Publisher configuration
 builder.Services.Configure<RabbitMqOptions>(builder.Configuration.GetSection("RabbitMq"));
