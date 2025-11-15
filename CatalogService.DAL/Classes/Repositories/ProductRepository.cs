@@ -2,10 +2,10 @@
 using CatalogService.DAL.Classes.Data;
 using CatalogService.DAL.Classes.Data.Entities;
 using CatalogService.Transversal.Classes.Dtos;
-using CatalogService.Transversal.Classes.Events;
 using CatalogService.Transversal.Classes.Filters;
 using CatalogService.Transversal.Interfaces.DAL;
 using Common.Utilities.Classes.Exceptions;
+using Common.Utilities.Classes.Messaging.Events;
 using Common.Utilities.Interfaces.Messaging.Events;
 using Microsoft.EntityFrameworkCore;
 
@@ -46,11 +46,11 @@ namespace CatalogService.DAL.Classes.Repositories
         {
             var entity = await GetProductById(id);
             _context.Products.Remove(entity);
-            await _context.SaveChangesAsync();
 
             var deletedEvent = new ProductDeletedEvent(entity.Id);
             _outboxWriter.Add(deletedEvent, "product.deleted");
 
+            await _context.SaveChangesAsync();
             var productDTO = _mapper.Map<ProductDTO>(entity);
             return productDTO;
         }
@@ -72,7 +72,6 @@ namespace CatalogService.DAL.Classes.Repositories
             productEntity.Price = entity.Price;
             productEntity.Amount = entity.Amount;
             productEntity.CategoryId = entity.CategoryId;
-            await _context.SaveChangesAsync();
 
             var updatedEvent = new ProductUpdatedEvent(
                 ProductId: productEntity.Id,
@@ -82,6 +81,7 @@ namespace CatalogService.DAL.Classes.Repositories
             );
 
             _outboxWriter.Add(updatedEvent, "product.updated");
+            await _context.SaveChangesAsync();
 
             return _mapper.Map<ProductDTO>(productEntity);
         }

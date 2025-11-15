@@ -9,6 +9,7 @@ using CatalogService.Transversal.Interfaces.DAL;
 using CatalogService.Transversal.Mappings;
 using Common.ApiUtilities.Middleware;
 using Common.Utilities.Classes.Messaging;
+using Common.Utilities.Classes.Messaging.Options;
 using Common.Utilities.Classes.Messaging.Publisher;
 using Common.Utilities.Interfaces.Messaging.Events;
 using Microsoft.EntityFrameworkCore;

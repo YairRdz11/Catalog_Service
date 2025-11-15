@@ -1,7 +1,6 @@
 ﻿using CatalogService.DAL.Classes.Data;
 using CatalogService.DAL.Classes.Data.Entities;
 using CatalogService.DAL.Classes.Data.Enums;
-using CatalogService.Transversal.Classes.Events;
 using Common.Utilities.Interfaces.Messaging.Events;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +12,7 @@ using System.Text.Json;
 using Microsoft.Extensions.Options;
 using Common.Utilities.Classes.Exceptions;
 using Common.Utilities.Classes.Messaging.Options;
+using Common.Utilities.Classes.Messaging.Events;
 
 namespace CatalogService.DAL.Messaging
 {

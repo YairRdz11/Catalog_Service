@@ -2,12 +2,11 @@
 using CatalogService.DAL.Classes.Data;
 using CatalogService.DAL.Classes.Data.Entities;
 using CatalogService.Transversal.Classes.Dtos;
-using CatalogService.Transversal.Classes.Events;
 using CatalogService.Transversal.Interfaces.DAL;
 using Common.Utilities.Classes.Exceptions;
+using Common.Utilities.Classes.Messaging.Events;
 using Common.Utilities.Interfaces.Messaging.Events;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json;
 
 namespace CatalogService.DAL.Classes.Repositories
 {
