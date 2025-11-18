@@ -7,11 +7,21 @@ using CatalogService.Transversal.Classes.Dtos;
 using Common.Utilities.Classes.Exceptions;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using Common.Utilities.Interfaces.Messaging.Events; // IOutboxWriter
 
 namespace CatalogService.Testing.UnitTesting.CatalogService.DAL.Testing
 {
     public class CategoryRepositoryTests
     {
+        // Simple fake outbox writer that does nothing
+        private sealed class FakeOutboxWriter : IOutboxWriter
+        {
+            public void Add(IIntegrationEvent @event, string routingKey, string? correlationId = null)
+            {
+                // No-op for unit tests
+            }
+        }
+
         private static CategoryRepository CreateRepository(out CatalogBDContext context)
         {
             var options = new DbContextOptionsBuilder<CatalogBDContext>()
@@ -21,7 +31,8 @@ namespace CatalogService.Testing.UnitTesting.CatalogService.DAL.Testing
 
             var mapperConfig = new MapperConfiguration(cfg => cfg.AddProfile<EntityMappingProfile>());
             var mapper = mapperConfig.CreateMapper();
-            return new CategoryRepository(context, mapper);
+            var outboxWriter = new FakeOutboxWriter();
+            return new CategoryRepository(context, mapper, outboxWriter);
         }
 
         private static CategoryDTO BuildDto(string name, string? description = null, string? url = null, Guid? parentId = null)

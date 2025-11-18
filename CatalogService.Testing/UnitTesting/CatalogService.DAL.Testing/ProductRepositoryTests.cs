@@ -8,11 +8,21 @@ using CatalogService.Transversal.Classes.Filters; // added
 using Common.Utilities.Classes.Exceptions;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using Common.Utilities.Interfaces.Messaging.Events; // IOutboxWriter
 
 namespace CatalogService.Testing.UnitTesting.CatalogService.DAL.Testing
 {
     public class ProductRepositoryTests
     {
+        // Simple fake outbox writer (no-op)
+        private sealed class FakeOutboxWriter : IOutboxWriter
+        {
+            public void Add(IIntegrationEvent @event, string routingKey, string? correlationId = null)
+            {
+                // Intentionally left blank for unit tests
+            }
+        }
+
         private static ProductRepository CreateRepository(out CatalogBDContext context)
         {
             var options = new DbContextOptionsBuilder<CatalogBDContext>()
@@ -21,7 +31,8 @@ namespace CatalogService.Testing.UnitTesting.CatalogService.DAL.Testing
             context = new CatalogBDContext(options);
             var mapperConfig = new MapperConfiguration(cfg => cfg.AddProfile<EntityMappingProfile>());
             var mapper = mapperConfig.CreateMapper();
-            return new ProductRepository(context, mapper);
+            var outboxWriter = new FakeOutboxWriter();
+            return new ProductRepository(context, mapper, outboxWriter);
         }
 
         private static ProductDTO BuildDto(string name, Guid categoryId, string? description = null, decimal price =0m, int amount =0, string? url = null)
