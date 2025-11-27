@@ -6,7 +6,9 @@ using CatalogService.Transversal.Classes.Models;
 using CatalogService.Transversal.Interfaces.BL;
 using Common.ApiUtilities.Classes.Common;
 using Common.Utilities.Classes.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Polly;
 
 namespace CatalogService.API.Controllers.v1
 {
@@ -25,6 +27,7 @@ namespace CatalogService.API.Controllers.v1
         }
 
         [HttpGet]
+        [Authorize(Roles = "Manager,StoreCustomer")]
         public async Task<ActionResult<ApiResponse>> GetAllProductsAsync([FromQuery] ProductFilterParams productFilter)
         {
             IEnumerable<ProductDTO> result = await _service.GetListAsync(productFilter);
@@ -38,6 +41,7 @@ namespace CatalogService.API.Controllers.v1
         }
 
         [HttpPost]
+        [Authorize(Policy = "ManagerPolicy")]
         public async Task<ActionResult<ApiResponse>> CreateProductAsync([FromBody] CreateProductModel model)
         {
             ProductDTO dto = _mapper.Map<ProductDTO>(model);
@@ -51,6 +55,7 @@ namespace CatalogService.API.Controllers.v1
         }
 
         [HttpGet]
+        [Authorize(Roles = "Manager,StoreCustomer")]
         [Route("{id:guid}")]
         public async Task<ActionResult<ApiResponse>> GetProductByIdAsync([FromRoute] Guid id)
         {
@@ -64,6 +69,7 @@ namespace CatalogService.API.Controllers.v1
         }
 
         [HttpDelete]
+        [Authorize(Policy = "ManagerPolicy")]
         [Route("{id:guid}")]
         public async Task<ActionResult<ApiResponse>> DeleteProductByIdAsync([FromRoute] Guid id)
         {
@@ -77,6 +83,7 @@ namespace CatalogService.API.Controllers.v1
         }
 
         [HttpPut]
+        [Authorize(Policy = "ManagerPolicy")]
         [Route("{id:guid}")]
         public async Task<ActionResult<ApiResponse>> UpdateProductAsync([FromRoute] Guid id, [FromBody] CreateProductModel model)
         {

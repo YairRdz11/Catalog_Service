@@ -5,7 +5,9 @@ using CatalogService.Transversal.Classes.Models;
 using CatalogService.Transversal.Interfaces.BL;
 using Common.ApiUtilities.Classes.Common;
 using Common.Utilities.Classes.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Polly;
 
 namespace CatalogService.API.Controllers.v1
 {
@@ -24,6 +26,7 @@ namespace CatalogService.API.Controllers.v1
         }
 
         [HttpGet]
+        [Authorize(Roles = "Manager,StoreCustomer")]
         public async Task<ActionResult<ApiResponse>> GetCategoriesAsync()
         {
             IEnumerable<CategoryDTO> result = await _service.GetListAsync();
@@ -37,6 +40,7 @@ namespace CatalogService.API.Controllers.v1
         }
 
         [HttpPost]
+        [Authorize(Policy = "ManagerPolicy")]
         public async Task<ActionResult<ApiResponse>> CreateCategoryAsync([FromBody] CreateCategoryModel model)
         {
             CategoryDTO dto = _mapper.Map<CategoryDTO>(model);
@@ -50,6 +54,7 @@ namespace CatalogService.API.Controllers.v1
         }
 
         [HttpGet]
+        [Authorize(Roles = "Manager,StoreCustomer")]
         [Route("{id:guid}")]
         public async Task<ActionResult<ApiResponse>> GetCategoryByIdAsync([FromRoute] Guid id)
         {
@@ -63,6 +68,7 @@ namespace CatalogService.API.Controllers.v1
         }
 
         [HttpDelete]
+        [Authorize(Policy = "ManagerPolicy")]
         [Route("{id:guid}")]
         public async Task<ActionResult<ApiResponse>> DeleteCategoryAsync([FromRoute] Guid id)
         {
@@ -76,6 +82,7 @@ namespace CatalogService.API.Controllers.v1
         }
 
         [HttpPut]
+        [Authorize(Policy = "ManagerPolicy")]
         [Route("{id:guid}")]
         public async Task<ActionResult<ApiResponse>> UpdateCategoryAsync([FromRoute] Guid id, [FromBody] CreateCategoryModel model)
         {
