@@ -10,12 +10,10 @@ namespace CatalogService.BLL.Classes
     public class CategoryService : ICategoryService
     {
         private readonly ICategoryRepository _categoryRepository;
-        private readonly IProductRepository _productRepository;
 
-        public CategoryService(ICategoryRepository categoryRepository, IProductRepository productRepository)
+        public CategoryService(ICategoryRepository categoryRepository)
         {
             _categoryRepository = categoryRepository;
-            _productRepository = productRepository;
         }
 
         public async Task<CategoryDTO> CreateAsync(CategoryDTO entity)
