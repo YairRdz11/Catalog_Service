@@ -38,7 +38,7 @@ namespace CatalogService.BLL.Classes
                 {
                     ErrorMessage = e.ErrorMessage,
                     PropertyName = e.PropertyName,
-                    AttempedValue = e.AttemptedValue?.ToString(),
+                    AttempedValue = e.AttemptedValue?.ToString() ?? string.Empty,
                     MessageOrigin = "ProductValidator"
                 }).ToList();
 

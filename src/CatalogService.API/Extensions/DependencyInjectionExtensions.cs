@@ -23,7 +23,8 @@ namespace CatalogService.API.Extensions
             services.AddAutoMapper(typeof(MappingProfile), typeof(EntityMappingProfile));
 
             // Database
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
+            var connectionString = configuration.GetConnectionString("DefaultConnection")
+             ?? throw new InvalidOperationException("The 'DefaultConnection' connection string is missing from configuration.");
             services.AddCatalogData(connectionString);
 
             // Repositories

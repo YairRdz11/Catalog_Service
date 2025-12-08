@@ -8,7 +8,7 @@ namespace CatalogService.DAL.Classes.Data.Entities
 
         [Required]
         [MaxLength(50)]
-        public string Name { get; set; }
+        public required string Name { get; set; }
 
         public string? Description { get; set; }
 

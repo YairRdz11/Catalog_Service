@@ -102,7 +102,7 @@ namespace CatalogService.DAL.Messaging
             foreach (var outboxEvent in batch)
             {
                 if (ct.IsCancellationRequested) break;
-                await ProcessSingleEventAsync(db, publisher, outboxEvent, ct);
+                await ProcessSingleEventAsync(publisher, outboxEvent, ct);
             }
 
             await db.SaveChangesAsync(ct);
@@ -125,7 +125,7 @@ namespace CatalogService.DAL.Messaging
             }
         }
 
-        private async Task ProcessSingleEventAsync(CatalogBDContext db, IRabbitMqPublisher publisher, OutboxEvent outboxEvent, CancellationToken ct)
+        private async Task ProcessSingleEventAsync(IRabbitMqPublisher publisher, OutboxEvent outboxEvent, CancellationToken ct)
         {
             try
             {

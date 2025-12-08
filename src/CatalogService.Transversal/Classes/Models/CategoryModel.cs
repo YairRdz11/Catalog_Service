@@ -6,11 +6,11 @@ namespace CatalogService.Transversal.Classes.Models
     public class CategoryModel
     {
         public Guid CategoryId { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string URL { get; set; }
+        public string? Name { get; set; }
+        public string? Description { get; set; }
+        public string? URL { get; set; }
         public Guid ParentCategoryId { get; set; }
-        public string ParentCategoryName { get; set; }
-        public IEnumerable<ProductModel> Products { get; set; }
+        public string? ParentCategoryName { get; set; }
+        public IEnumerable<ProductModel>? Products { get; set; }
     }
 }

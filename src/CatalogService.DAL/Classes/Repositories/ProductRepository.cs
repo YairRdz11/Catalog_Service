@@ -98,7 +98,7 @@ namespace CatalogService.DAL.Classes.Repositories
         public async Task<IEnumerable<ProductDTO>> GetListAsync(ProductFilterParams filter)
         {
             var pageNumber = filter.PageNumber < 1 ? 1 : filter.PageNumber;
-            var pageSize = filter.PageSize < 1 ? 10 : (filter.PageSize > 100 ? 100 : filter.PageSize);
+            var pageSize = filter.PageSize < 1 ? 10 : filter.PageSize;
             var query = _context.Products.AsQueryable();
 
             if (filter.CategoryId.HasValue)
@@ -106,9 +106,18 @@ namespace CatalogService.DAL.Classes.Repositories
                 query = query.Where(p => p.CategoryId == filter.CategoryId.Value);
             }
 
+            if (filter.PageSize > 100)
+            {
+                pageSize = 100;
+            }
+            else
+            {
+                pageSize = filter.PageSize;
+            }
+
             query = query.OrderBy(p => p.Name)
-                         .Skip((pageNumber - 1) * pageSize)
-                         .Take(pageSize);
+                             .Skip((pageNumber - 1) * pageSize)
+                             .Take(pageSize);
 
             var products = await query.ToListAsync();
 

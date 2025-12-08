@@ -23,7 +23,7 @@ namespace CatalogService.DAL.Classes.Mapping
             CreateMap<Product, ProductDTO>()
                 .ForMember(d => d.Id, m => m.MapFrom(s => s.Id))
                 .ForMember(d => d.CategoryId, m => m.MapFrom(s => s.CategoryId))
-                .ForMember(d => d.CategoryName, m => m.MapFrom(s => s.Category.Name != null ? s.Category.Name : null))
+                .ForMember(d => d.CategoryName, m => m.MapFrom(s => s.Category != null ? s.Category.Name : null))
                 .ForMember(d => d.Description, m => m.MapFrom(s => s.Description))
                 .ForMember(d => d.URL, m => m.MapFrom(s => s.ImageUrl))
                 .ForMember(d => d.Price, m => m.MapFrom(s => s.Price))

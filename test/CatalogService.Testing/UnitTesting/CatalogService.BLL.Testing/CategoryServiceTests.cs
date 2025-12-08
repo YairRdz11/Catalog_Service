@@ -17,7 +17,7 @@ namespace CatalogService.Testing.UnitTesting.CatalogService.BLL.Testing
         {
             _mockCategoryRepository = new Mock<ICategoryRepository>();
             _mockProductRepository = new Mock<IProductRepository>();
-            _categoryService = new CategoryService(_mockCategoryRepository.Object, _mockProductRepository.Object);
+            _categoryService = new CategoryService(_mockCategoryRepository.Object);
         }
 
 #region CreateAsync Tests
