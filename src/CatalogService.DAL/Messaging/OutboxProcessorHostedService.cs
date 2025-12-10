@@ -117,7 +117,7 @@ namespace CatalogService.DAL.Messaging
                 .ToListAsync(ct);
         }
 
-        private void MarkBatchProcessing(IEnumerable<OutboxEvent> batch)
+        private static void MarkBatchProcessing(IEnumerable<OutboxEvent> batch)
         {
             foreach (var e in batch)
             {
@@ -163,7 +163,7 @@ namespace CatalogService.DAL.Messaging
             return false;
         }
 
-        private void MarkSucceeded(OutboxEvent outboxEvent)
+        private static void MarkSucceeded(OutboxEvent outboxEvent)
         {
             outboxEvent.Status = OutboxEventStatus.Succeeded;
             outboxEvent.ProcessedOnUtc = DateTime.UtcNow;
@@ -187,13 +187,13 @@ namespace CatalogService.DAL.Messaging
             }
         }
 
-        private void MarkAbandoned(OutboxEvent outboxEvent, string reason)
+        private static void MarkAbandoned(OutboxEvent outboxEvent, string reason)
         {
             outboxEvent.Status = OutboxEventStatus.Abandoned;
             outboxEvent.LastError = reason;
         }
 
-        private IIntegrationEvent Deserialize(OutboxEvent outbox)
+        private static IIntegrationEvent Deserialize(OutboxEvent outbox)
         {
             if (!AllowedEventTypes.TryGetValue(outbox.EventType, out var type))
             {

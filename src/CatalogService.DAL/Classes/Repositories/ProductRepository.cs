@@ -90,7 +90,7 @@ namespace CatalogService.DAL.Classes.Repositories
         {
             var normalized = name.Trim().ToUpperInvariant();
 
-            var entity = await _context.Products.FirstOrDefaultAsync(c => c.Name.ToUpper() == normalized);
+            var entity = await _context.Products.FirstOrDefaultAsync(c => string.Equals(c.Name, normalized, StringComparison.OrdinalIgnoreCase));
 
             return entity != null;
         }
@@ -98,21 +98,13 @@ namespace CatalogService.DAL.Classes.Repositories
         public async Task<IEnumerable<ProductDTO>> GetListAsync(ProductFilterParams filter)
         {
             var pageNumber = filter.PageNumber < 1 ? 1 : filter.PageNumber;
-            var pageSize = filter.PageSize < 1 ? 10 : filter.PageSize;
+            var requestedSize = filter.PageSize;
+            var pageSize = requestedSize < 1 ? 10 : (requestedSize > 100 ? 100 : requestedSize);
             var query = _context.Products.AsQueryable();
 
             if (filter.CategoryId.HasValue)
             {
                 query = query.Where(p => p.CategoryId == filter.CategoryId.Value);
-            }
-
-            if (filter.PageSize > 100)
-            {
-                pageSize = 100;
-            }
-            else
-            {
-                pageSize = filter.PageSize;
             }
 
             query = query.OrderBy(p => p.Name)

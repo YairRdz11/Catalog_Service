@@ -14,7 +14,7 @@ namespace CatalogService.BLL.Classes.Validators
                 .MaximumLength(50).WithMessage("Category name must not exceed 50 characters.");
             RuleFor(category => category.Description)
                 .MaximumLength(500).WithMessage("Category description must not exceed 500 characters.")
-                .When(c => !string.IsNullOrWhiteSpace(c.Description)); ;
+                .When(c => !string.IsNullOrWhiteSpace(c.Description));
             RuleFor(c => c.URL)
                 .Cascade(CascadeMode.Stop)
                 .MaximumLength(200).WithMessage("Category URL must not exceed 200 characters.")

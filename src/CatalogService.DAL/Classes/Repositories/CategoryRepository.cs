@@ -92,7 +92,7 @@ namespace CatalogService.DAL.Classes.Repositories
         {
             var normalized = name.Trim().ToUpperInvariant();
 
-            var entity = await _context.Categories.FirstOrDefaultAsync(c => c.Name.ToUpper() == normalized);
+            var entity = await _context.Categories.FirstOrDefaultAsync(c => string.Equals(c.Name, normalized, StringComparison.OrdinalIgnoreCase));
 
             return entity != null;
         }
