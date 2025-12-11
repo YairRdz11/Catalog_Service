@@ -18,22 +18,6 @@ namespace CatalogService.Transversal.Mappings
                 .ForMember(dest => dest.ParentCategoryName, opt => opt.MapFrom(src => src.ParentCategoryName))
                 .ForMember(dest => dest.Products, opt => opt.MapFrom(src => src.Products));
 
-            // Map from CategoryModel to CategoryDTO
-            CreateMap<CategoryModel, CategoryDTO>()
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.CategoryId))
-                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
-                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
-                .ForMember(dest => dest.URL, opt => opt.MapFrom(src => src.URL))
-                .ForMember(dest => dest.ParentCategoryId, opt => opt.MapFrom(src => src.ParentCategoryId))
-                .ForMember(dest => dest.ParentCategoryName, opt => opt.MapFrom(src => src.ParentCategoryName));
-
-            // Map from CreateCategoryModel to CategoryDTO
-            CreateMap<CreateCategoryModel, CategoryDTO>()
-                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
-                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
-                .ForMember(dest => dest.URL, opt => opt.MapFrom(src => src.URL))
-                .ForMember(dest => dest.ParentCategoryId, opt => opt.MapFrom(src => src.ParentCategoryId));
-
             // Map from CategoryDTO to CategoryModel
             CreateMap<ProductDTO, ProductModel>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
@@ -41,25 +25,6 @@ namespace CatalogService.Transversal.Mappings
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
                 .ForMember(dest => dest.URL, opt => opt.MapFrom(src => src.URL))
                 .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.CategoryName))
-                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
-                .ForMember(dest => dest.Amount, opt => opt.MapFrom(src => src.Amount));
-
-            // Map from CategoryModel to CategoryDTO
-            CreateMap<ProductModel, ProductDTO>()
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
-                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
-                .ForMember(dest => dest.URL, opt => opt.MapFrom(src => src.URL))
-                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.CategoryName))
-                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
-                .ForMember(dest => dest.Amount, opt => opt.MapFrom(src => src.Amount));
-
-            // Map from CreateProductModel to ProductDTO
-            CreateMap<CreateProductModel, ProductDTO>()
-                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
-                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
-                .ForMember(dest => dest.URL, opt => opt.MapFrom(src => src.URL))
-                .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.CategoryId))
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
                 .ForMember(dest => dest.Amount, opt => opt.MapFrom(src => src.Amount));
         }

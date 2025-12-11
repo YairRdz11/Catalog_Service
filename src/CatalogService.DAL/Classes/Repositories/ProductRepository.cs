@@ -95,11 +95,27 @@ namespace CatalogService.DAL.Classes.Repositories
             return entity != null;
         }
 
+        private static int GetPageSize(int requestedSize)
+        {
+            if (requestedSize < 1)
+            {
+                return 10;
+            }
+            else if (requestedSize > 100)
+            {
+                return 100;
+            }
+            else
+            {
+                return requestedSize;
+            }
+        }
+
         public async Task<IEnumerable<ProductDTO>> GetListAsync(ProductFilterParams filter)
         {
             var pageNumber = filter.PageNumber < 1 ? 1 : filter.PageNumber;
             var requestedSize = filter.PageSize;
-            var pageSize = requestedSize < 1 ? 10 : (requestedSize > 100 ? 100 : requestedSize);
+            var pageSize = GetPageSize(requestedSize);
             var query = _context.Products.AsQueryable();
 
             if (filter.CategoryId.HasValue)

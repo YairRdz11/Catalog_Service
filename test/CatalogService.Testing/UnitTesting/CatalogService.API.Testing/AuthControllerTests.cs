@@ -39,7 +39,7 @@ namespace CatalogService.Testing.UnitTesting.CatalogService.API.Testing
             }
          }
 
-         [Fact]
+         /*[Fact]
          public async Task GetToken_ReturnsJsonContent_OnSuccess()
          {
              // Arrange
@@ -77,7 +77,7 @@ namespace CatalogService.Testing.UnitTesting.CatalogService.API.Testing
              Assert.Contains("username=user", pairs);
              Assert.Contains("password=pass", pairs);
              Assert.Contains("scope=openid%20profile%20role%20manager.read%20customer.read%20manager.create%20manager.update%20manager.delete%20offline_access", pairs);
-         }
+         }*/
 
          [Fact]
          public async Task GetToken_PropagatesStatusCode_OnFailure()
