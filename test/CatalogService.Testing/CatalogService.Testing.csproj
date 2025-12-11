@@ -31,6 +31,7 @@
     <ProjectReference Include="..\..\src\CatalogService.BLL\CatalogService.BLL.csproj" />
     <ProjectReference Include="..\..\src\CatalogService.DAL\CatalogService.DAL.csproj" />
     <ProjectReference Include="..\..\src\CatalogService.Transversal\CatalogService.Transversal.csproj" />
+    <ProjectReference Include="..\..\src\CatalogService.API\CatalogService.API.csproj" />
   </ItemGroup>
 
   <ItemGroup>
