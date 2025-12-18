@@ -44,7 +44,15 @@ namespace CatalogService.API.Controllers.v1
         [Authorize(Policy = "ManagerPolicy")]
         public async Task<ActionResult<ApiResponse>> CreateProductAsync([FromBody] CreateProductModel model)
         {
-            ProductDTO dto = _mapper.Map<ProductDTO>(model);
+            ProductDTO dto = new ProductDTO
+            {
+                Name = model.Name,
+                Description = model.Description,
+                URL = model.URL,
+                Price = model.Price,
+                Amount = model.Amount,
+                CategoryId = model.CategoryId
+            };
             ProductDTO createdDto = await _service.CreateAsync(dto);
             ProductModel createdModel = _mapper.Map<ProductModel>(createdDto);
             return Ok(new ApiResponse
@@ -87,7 +95,15 @@ namespace CatalogService.API.Controllers.v1
         [Route("{id:guid}")]
         public async Task<ActionResult<ApiResponse>> UpdateProductAsync([FromRoute] Guid id, [FromBody] CreateProductModel model)
         {
-            ProductDTO dto = _mapper.Map<ProductDTO>(model);
+            ProductDTO dto = new ProductDTO
+            {
+                Name = model.Name,
+                Description = model.Description,
+                URL = model.URL,
+                Price = model.Price,
+                Amount = model.Amount,
+                CategoryId = model.CategoryId
+            };
             dto.Id = id;
             ProductDTO updatedDto = await _service.UpdateAsync(dto);
             ProductModel updatedModel = _mapper.Map<ProductModel>(updatedDto);

@@ -1,0 +1,158 @@
+version: "3.8"
+
+services:
+  catalogservice.api:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: catalogservice.api
+    environment:
+      # ASP.NET
+      ASPNETCORE_URLS: http://+:80
+      ASPNETCORE_ENVIRONMENT: Development
+      DOTNET_ENVIRONMENT: Development
+      Database__MigrateOnStartup: "true"
+
+      # Override de ConnectionStrings (reemplaza LocalDB por el servicio sqlserver)
+      ConnectionStrings__DefaultConnection: Server=sqlserver,1433;Database=CatalogDataBase;User Id=sa;Password=YourStrong!Passw0rd123;TrustServerCertificate=true;Encrypt=false;
+
+      # RabbitMQ (coinciden con appsettings: "RabbitMq")
+      RabbitMq__Host: rabbitmq
+      RabbitMq__Port: "5672"
+      RabbitMq__User: guest
+      RabbitMq__Password: guest
+      RabbitMq__VirtualHost: "/"
+      RabbitMq__Exchange: catalog.integration
+      RabbitMq__PublisherConfirmEnabled: "true"
+      RabbitMq__Retry__Enabled: "true"
+      RabbitMq__Retry__InitialDelaySeconds: "2"
+      RabbitMq__Retry__MaxDelaySeconds: "30"
+      RabbitMq__Retry__MaxAttempts: "5"
+    ports:
+      - "8081:80"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      sqlserver:
+        condition: service_healthy
+      duendeidentity:
+        condition: service_started
+  
+  cartservice.api:
+    image: cartservice:final
+    container_name: cartserviceapi
+    environment:
+      # ASP.NET Core
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+
+      # Authentication
+      Authentication__Authority: "https://duendeidentity:8080"
+
+      # Swagger
+      Swagger__Title: "Cart API"
+      Swagger__Version: "v1"
+      Swagger__Description: "Cart Service API with JWT Authentication"
+      Swagger__Contact__Name: "Development Team"
+      Swagger__Contact__Email: "dev@example.com"
+      Swagger__Contact__Url: "https://example.com"
+      Swagger__License__Name: "MIT"
+      Swagger__License__Url: "https://opensource.org/licenses/MIT"
+      Swagger__EnableJwtAuthentication: "true"
+      Swagger__RoutePrefix: "swagger"
+      Swagger__DocumentTitle: "My API Documentation"
+
+      # Logging
+      Logging__LogLevel__Default: "Information"
+      Logging__LogLevel__Microsoft.AspNetCore: "Warning"
+
+      # AllowedHosts
+      AllowedHosts: "*"
+
+      # RabbitMQ (usar el nombre del servicio como host dentro de la red de docker)
+      RabbitMq__Host: "rabbitmq"
+      RabbitMq__Port: "5672"
+      RabbitMq__User: "guest"
+      RabbitMq__Password: "guest"
+      RabbitMq__Exchange: "catalog.integration"
+      RabbitMq__Queue: "cart.product-updates.q"
+      RabbitMq__RoutingKey: "product.updated"
+      RabbitMq__PrefetchCount: "20"
+
+      # LiteDb path
+      LiteDb__Path: "/data/ShoppingCart.db"
+
+    ports:
+      - "8082:8080"
+    restart: unless-stopped
+    depends_on:
+        rabbitmq:
+          condition: service_healthy
+        duendeidentity:
+          condition: service_started
+    volumes:
+      - cartdata:/data
+
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    container_name: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_running"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: YourStrong!Passw0rd123
+    ports:
+      - "1434:1433"
+    volumes:
+      - mssqldata:/var/opt/mssql
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - ( /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$$MSSQL_SA_PASSWORD" -C -Q "SELECT 1" -b -o /dev/null ) || ( /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "$$MSSQL_SA_PASSWORD" -Q "SELECT 1" -b -o /dev/null )
+      interval: 10s
+      timeout: 5s
+      retries: 10
+  duendeidentity:
+    image: duende-identityserver:latest
+    container_name: duendeidentity
+    environment:
+      # Connection string for ApplicationDbContext (adjust if your name differs)
+      # Uses SQL Server container 'db' and default database 'IdentityDb'
+      ConnectionStrings__DefaultConnection: "Server=identitydb;Database=IdentityDb;User Id=sa;Password=Pass@word1;TrustServerCertificate=True;"
+      ASPNETCORE_ENVIRONMENT: "Production"
+      ASPNETCORE_URLS: "http://+:8080"
+      Database__MigrateOnStartup: "true"
+      IssuerUri: "http://localhost:8080"
+    depends_on:
+      - identitydb
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+  identitydb:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: identitydb
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Pass@word1"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql_data:/var/opt/mssql
+    restart: unless-stopped
+volumes:
+  mssqldata:
+  sql_data:
+  cartdata:

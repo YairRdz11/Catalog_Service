@@ -21,13 +21,13 @@ namespace CatalogService.BLL.Classes
         public async Task<ProductDTO> CreateAsync(ProductDTO productDTO)
         {
             productDTO.Id = Guid.NewGuid();
-            await ValidateProduct(productDTO);
+            ValidateProduct(productDTO);
             var category = await _categoryRepository.GetByIdAsync(productDTO.CategoryId);
             var result = await _repository.CreateAsync(productDTO);
             return result;
         }
 
-        private async Task ValidateProduct(ProductDTO productDTO)
+        private void ValidateProduct(ProductDTO productDTO)
         {
             var validator = new Validators.ProductValidator();
             validator.ProductValidate();
@@ -42,21 +42,6 @@ namespace CatalogService.BLL.Classes
                     MessageOrigin = "ProductValidator"
                 }).ToList();
 
-                throw new ValidateException(errorList);
-            }
-
-            if (await _repository.DoesItemExistByNameAsync(productDTO.Name))
-            {
-                var errorList = new List<RuleError>
-                {
-                    new RuleError
-                    {
-                        ErrorMessage = $"Category with name '{productDTO.Name}' already exists.",
-                        PropertyName = "Name",
-                        AttempedValue = productDTO.Name,
-                        MessageOrigin = "CategoryService"
-                    }
-                };
                 throw new ValidateException(errorList);
             }
         }
@@ -95,7 +80,7 @@ namespace CatalogService.BLL.Classes
 
         public async Task<ProductDTO> UpdateAsync(ProductDTO entity)
         {
-            await ValidateProduct(entity);
+            ValidateProduct(entity);
             var product = await _repository.GetByIdAsync(entity.Id);
             var category = await _categoryRepository.GetByIdAsync(entity.CategoryId);
             var result = await _repository.UpdateAsync(entity);

@@ -19,7 +19,7 @@ namespace CatalogService.BLL.Classes
         public async Task<CategoryDTO> CreateAsync(CategoryDTO entity)
         {
             entity.Id = Guid.NewGuid();
-            await ValidateCategory(entity);
+            ValidateCategory(entity);
 
             if (entity.ParentCategoryId != Guid.Empty)
             {
@@ -50,7 +50,7 @@ namespace CatalogService.BLL.Classes
         public async Task<CategoryDTO> UpdateAsync(CategoryDTO categoryDTO)
         {
             var entity = await _categoryRepository.GetByIdAsync(categoryDTO.Id);
-            await ValidateCategory(categoryDTO);
+            ValidateCategory(categoryDTO);
             if (categoryDTO.ParentCategoryId != Guid.Empty)
             {
                 var parentCategory = await _categoryRepository.GetByIdAsync(categoryDTO.ParentCategoryId);
@@ -59,7 +59,7 @@ namespace CatalogService.BLL.Classes
             return result;
         }
 
-        private async Task ValidateCategory(CategoryDTO category)
+        private void ValidateCategory(CategoryDTO category)
         {
             var validator = new CategoryValidator();
             validator.CategoryValidate();
@@ -74,21 +74,6 @@ namespace CatalogService.BLL.Classes
                     MessageOrigin = "CategoryValidator"
                 }).ToList();
 
-                throw new ValidateException(errorList);
-            }
-
-            if (await _categoryRepository.DoesItemExistByNameAsync(category.Name))
-            {
-                var errorList = new List<RuleError>
-                {
-                    new RuleError
-                    {
-                        ErrorMessage = $"Category with name '{category.Name}' already exists.",
-                        PropertyName = "Name",
-                        AttempedValue = category.Name,
-                        MessageOrigin = "CategoryService"
-                    }
-                };
                 throw new ValidateException(errorList);
             }
         }

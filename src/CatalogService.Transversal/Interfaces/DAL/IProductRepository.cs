@@ -4,7 +4,7 @@ using CatalogService.Transversal.Interfaces.Base;
 
 namespace CatalogService.Transversal.Interfaces.DAL
 {
-    public interface IProductRepository : ICrudBase<ProductDTO>, IGetPagedList<ProductDTO, ProductFilterParams>, IGetByNameAsync
+    public interface IProductRepository : ICrudBase<ProductDTO>, IGetPagedList<ProductDTO, ProductFilterParams>
     {
     }
 }

@@ -86,15 +86,6 @@ namespace CatalogService.DAL.Classes.Repositories
             return _mapper.Map<ProductDTO>(productEntity);
         }
 
-        public async Task<bool> DoesItemExistByNameAsync(string name)
-        {
-            var normalized = name.Trim().ToUpperInvariant();
-
-            var entity = await _context.Products.FirstOrDefaultAsync(c => string.Equals(c.Name, normalized, StringComparison.OrdinalIgnoreCase));
-
-            return entity != null;
-        }
-
         private static int GetPageSize(int requestedSize)
         {
             if (requestedSize < 1)

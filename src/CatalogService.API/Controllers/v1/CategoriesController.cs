@@ -43,7 +43,13 @@ namespace CatalogService.API.Controllers.v1
         [Authorize(Policy = "ManagerPolicy")]
         public async Task<ActionResult<ApiResponse>> CreateCategoryAsync([FromBody] CreateCategoryModel model)
         {
-            CategoryDTO dto = _mapper.Map<CategoryDTO>(model);
+            CategoryDTO dto = new CategoryDTO
+            {
+                Name = model.Name,
+                Description = model.Description,
+                URL = model.URL,
+                ParentCategoryId = model.ParentCategoryId ?? Guid.Empty
+            };
             CategoryDTO createdDto = await _service.CreateAsync(dto);
             CategoryModel createdModel = _mapper.Map<CategoryModel>(createdDto);
             return Ok(new ApiResponse
@@ -86,7 +92,13 @@ namespace CatalogService.API.Controllers.v1
         [Route("{id:guid}")]
         public async Task<ActionResult<ApiResponse>> UpdateCategoryAsync([FromRoute] Guid id, [FromBody] CreateCategoryModel model)
         {
-            CategoryDTO dto = _mapper.Map<CategoryDTO>(model);
+            CategoryDTO dto = new CategoryDTO
+            {
+                Name = model.Name,
+                Description = model.Description,
+                URL = model.URL,
+                ParentCategoryId = model.ParentCategoryId ?? Guid.Empty
+            };
             dto.Id = id;
             CategoryDTO updatedDto = await _service.UpdateAsync(dto);
             CategoryModel updatedModel = _mapper.Map<CategoryModel>(updatedDto);

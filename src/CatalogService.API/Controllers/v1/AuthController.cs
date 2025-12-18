@@ -22,7 +22,7 @@ namespace CatalogService.API.Controllers.v1
         public async Task<IActionResult> GetToken([FromBody] LoginRequest loginRequest)
         {
             var client = _httpClientFactory.CreateClient();
-            var tokenEndpoint = "https://localhost:5001/connect/token";
+            var tokenEndpoint = "http://duendeidentity:8080/connect/token";
 
 
             var form = new Dictionary<string, string>

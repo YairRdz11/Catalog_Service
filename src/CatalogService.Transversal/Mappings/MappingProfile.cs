@@ -16,7 +16,7 @@ namespace CatalogService.Transversal.Mappings
                 .ForMember(dest => dest.URL, opt => opt.MapFrom(src => src.URL))
                 .ForMember(dest => dest.ParentCategoryId, opt => opt.MapFrom(src => src.ParentCategoryId))
                 .ForMember(dest => dest.ParentCategoryName, opt => opt.MapFrom(src => src.ParentCategoryName))
-                .ForMember(dest => dest.Products, opt => opt.MapFrom(src => src.Products));
+                .ForMember(dest => dest.Products, opt => opt.MapFrom(src => src.Products)).ReverseMap();
 
             // Map from CategoryDTO to CategoryModel
             CreateMap<ProductDTO, ProductModel>()
@@ -26,7 +26,7 @@ namespace CatalogService.Transversal.Mappings
                 .ForMember(dest => dest.URL, opt => opt.MapFrom(src => src.URL))
                 .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.CategoryName))
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
-                .ForMember(dest => dest.Amount, opt => opt.MapFrom(src => src.Amount));
+                .ForMember(dest => dest.Amount, opt => opt.MapFrom(src => src.Amount)).ReverseMap();
         }
     }
 }

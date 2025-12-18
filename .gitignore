@@ -364,3 +364,6 @@ FodyWeavers.xsd
 ## SonarScanner output (do not commit)
 .sonarqube/
 .scannerwork/
+
+# Nuget Package
+NugetPackage/
